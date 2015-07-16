@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<h1><spring:message code="user.membership" /></h1>
+<ul>
+    <li>
+        <ul>
+            <li><a href="../j_spring_security_logout"><spring:message code="user.logout" /></a></li>
+            <li><a href="editAccount"><spring:message code="user.modify.account" /></a></li>
+            <li><a href="changePasswd"><spring:message code="user.change.password" /></a></li>
+            <li><a href="bye"><spring:message code="user.bye" /></a></li>
+        </ul>
+    </li>
+</ul>
