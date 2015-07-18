@@ -67,5 +67,4 @@ insert into board values ('free','자유게시판');
 insert into board values ('qna','QnA게시판');
 insert into board values ('data','자료실');
  
-commit;                                       
-
+commit;
