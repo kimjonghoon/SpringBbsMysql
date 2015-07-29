@@ -44,7 +44,7 @@ create table article (
  
 -- 댓글
 create table comments (
-    commentno int not null auto_increment,
+    commentno int NOT NULL AUTO_INCREMENT,
     articleno int,    
     email varchar(60),    
     memo varchar(4000) NOT NULL,
@@ -54,9 +54,9 @@ create table comments (
  
 -- 첨부파일 
 create table attachfile (
-    attachfileno int not null auto_increment,
-    filename varchar(50) NOT NULL,
-    filetype varchar(30),
+    attachfileno int NOT NULL AUTO_INCREMENT,
+    filename varchar(255) NOT NULL,
+    filetype varchar(255),
     filesize bigint,
     articleno int,
     email varchar(60),
