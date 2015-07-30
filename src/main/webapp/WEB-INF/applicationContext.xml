@@ -14,7 +14,7 @@
     <property name="maxWait" value="1000"/>
     <property name="poolPreparedStatements" value="true"/>
     <property name="defaultAutoCommit" value="true"/>
-    <property name="validationQuery" value=" SELECT 1" />
+    <property name="validationQuery" value="SELECT 1" />
   </bean>
 
   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
