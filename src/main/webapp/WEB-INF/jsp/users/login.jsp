@@ -11,6 +11,7 @@
 <meta name="Description" content="<spring:message code="user.login.description" />" />
 <title><spring:message code="user.login.title" /></title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 
@@ -30,18 +31,22 @@
 <!-- contents begin -->
 <div id="url-navi"><spring:message code="user.membership" /></div>
 <h1><spring:message code="user.login.heading" /></h1>
-<c:if test="${not empty param.msg }">
+<c:if test="${not empty param.error }">
 	<h2>${SPRING_SECURITY_LAST_EXCEPTION.message }</h2>
 </c:if>
-<form id="loginForm" action="../j_spring_security_check" method="post">
+<c:url var="loginUrl" value="/login" />
+<form id="loginForm" action="${loginUrl }" method="post">
+<p style="margin: 0;padding: 0;">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</p>
 <table>
 <tr>
     <td style="width: 200px;"><spring:message code="user.email" /></td>
-    <td style="width: 390px"><input type="text" name="j_username" style="width: 99%;" /></td>
+    <td style="width: 390px"><input type="text" name="username" style="width: 99%;" /></td>
 </tr>
 <tr>
     <td><spring:message code="user.password" /></td>
-    <td><input type="password" name="j_password" style="width: 99%;" /></td>
+    <td><input type="password" name="password" style="width: 99%;" /></td>
 </tr>
 </table>
 <div style="text-align: center;padding: 15px 0;">
