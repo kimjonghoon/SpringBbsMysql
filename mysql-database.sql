@@ -1,4 +1,3 @@
--- 회원테이블 
 create table member (
     email varchar(60) PRIMARY KEY,
     passwd varchar(20) NOT NULL,
@@ -6,7 +5,6 @@ create table member (
     mobile varchar(20)
 );
  
---권한 테이블
 CREATE TABLE authorities (
   email VARCHAR(60) NOT NULL,
   authority VARCHAR(20) NOT NULL,
@@ -22,14 +20,12 @@ INSERT INTO authorities VALUES ('hong@gmail.org','ROLE_USER');
 INSERT INTO authorities VALUES ('hong@gmail.org','ROLE_ADMIN');
 INSERT INTO authorities VALUES ('im@gmail.org','ROLE_USER');
  
--- 게시판 종류
 create table board (
     boardcd varchar(20),
     boardnm varchar(40) NOT NULL,
     constraint PK_BOARD PRIMARY KEY(boardcd)
 );
  
--- 게시글
 create table article (
     articleno int NOT NULL AUTO_INCREMENT,
     boardcd varchar(20),
@@ -42,7 +38,6 @@ create table article (
     constraint FK_ARTICLE FOREIGN KEY(boardcd) REFERENCES board(boardcd)
 );
  
--- 댓글
 create table comments (
     commentno int NOT NULL AUTO_INCREMENT,
     articleno int,    
@@ -52,7 +47,6 @@ create table comments (
     constraint PK_COMMENTS PRIMARY KEY(commentno)
 );
  
--- 첨부파일 
 create table attachfile (
     attachfileno int NOT NULL AUTO_INCREMENT,
     filename varchar(255) NOT NULL,
@@ -63,8 +57,8 @@ create table attachfile (
     constraint PK_ATTACHFILE PRIMARY KEY(attachfileno)
 );
  
-insert into board values ('free','자유게시판');
-insert into board values ('qna','QnA게시판');
+insert into board values ('free','자유 게시판');
+insert into board values ('qna','QnA 게시판');
 insert into board values ('data','자료실');
  
-commit;
+commit;                                       
