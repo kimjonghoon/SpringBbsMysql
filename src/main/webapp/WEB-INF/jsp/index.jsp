@@ -11,7 +11,7 @@
 <meta name="Keywords" content="<spring:message code="home.keywords" />" />
 <meta name="Description" content="<spring:message code="home.description" />" />
 <title><spring:message code="home.title" /></title>
-<link rel="stylesheet" href="css/screen.css" type="text/css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
