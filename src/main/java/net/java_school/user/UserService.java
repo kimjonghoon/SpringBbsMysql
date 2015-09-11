@@ -10,9 +10,6 @@ public interface UserService {
   //회원권한 추가
   public void addAuthority(String email, String authority);
 
-  //로그인
-  public User login(String email, String passwd);
-
   //내 정보 수정
   @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
   public int editAccount(User user);
