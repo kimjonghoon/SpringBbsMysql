@@ -189,13 +189,13 @@
                 
 <div id="paging">
 	<c:if test="${prevPage > 0 }">
-		<a href="#" title="${prevPage }">[<spring:message code="global.prev" />]</a>
+		<a href="#" title="${prevPage }">[ <spring:message code="global.prev" /> ]</a>
 	</c:if>
 	
 	<c:forEach var="i" begin="${firstPage }" end="${lastPage }">
 		<c:choose>
 			<c:when test="${param.curPage == i }">
-				<span class="bbs-strong">${i }</span>
+				<span class="bbs-strong">[ ${i } ]</span>
 			</c:when>	
 			<c:otherwise>	
 				<a href="#" title="${i }">${i }</a>
@@ -204,7 +204,7 @@
 	</c:forEach>
 	
 	<c:if test="${nextPage > 0 }">	
-		<a href="#" title="${nextPage }">[<spring:message code="global.next" />]</a>
+		<a href="#" title="${nextPage }">[ <spring:message code="global.next" /> ]</a>
 	</c:if>
 </div>
 
