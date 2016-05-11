@@ -13,15 +13,15 @@ have to edit
 
 3. 
   1) create user and database
-
   $ mysql --user=root --password mysql
-  mysql> create user 'java'@'%' identified by 'school';
-  mysql> grant all privileges on *.* to 'java'@'%';
-  mysql> create database javaschool;
-  mysql> exit;
+  
+  mysql&gt; create user 'java'@'%' identified by 'school';
+  mysql&gt; grant all privileges on *.* to 'java'@'%';
+  mysql&gt; create database javaschool;
+  mysql&gt; exit;
   
   $ mysql --user=java --password javaschool
-  mysql>
+  mysql&gt;
   
   2) create tables;
   $ mysql --user=java --password javaschool
