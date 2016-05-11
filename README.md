@@ -1,5 +1,5 @@
-SpringBbs
-=========
+SpringBbsMysql
+=================
 
 BBS using Spring MVC + MyBatis-Spring + Spring-Security + Bean Validation
 
@@ -9,10 +9,10 @@ have to edit
 1. net.java_school.commons.WebContants.java's UPLOAD_PATH
 
 2. /src/main/resources/log4j.xml 
-&lt;param name="File"  value="Full path of log file " /&gt;
+&lt;param name="File"  value="{Full path of log file}"/&gt;
 
 3. 
-  1) creationg user and database
+  1) create user and database
 
   $ mysql --user=root --password mysql
   mysql> create user 'java'@'%' identified by 'school';
@@ -23,9 +23,9 @@ have to edit
   $ mysql --user=java --password javaschool
   mysql>
   
-  2) crating tables;
+  2) create tables;
   $ mysql --user=java --password javaschool
-  mysql> source /your maven project root/mysql-database.sql 
+  mysql&gt; source {your maven project root}/mysql-database.sql 
  
   FYI, refer to http://www.java-school.net/spring/SpringBbs-with-MySql
 
