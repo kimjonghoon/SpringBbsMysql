@@ -28,6 +28,9 @@ have to edit
   mysql&gt; source {your maven project root}/mysql-database.sql 
  
   FYI, refer to http://www.java-school.net/spring/SpringBbs-with-MySql
+4.
+https://dev.mysql.com/downloads/connector/j/
+mysql-connector-java-5.1.36-bin.jar -> {TOMCAT_HOME}/lib  
 
 
 
