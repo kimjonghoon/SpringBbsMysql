@@ -7,7 +7,7 @@ String contextPath = request.getContextPath();
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8">
 <meta name="Keywords" content="Error" />
 <meta name="Description" content="Error" />
 <title>Error</title>
