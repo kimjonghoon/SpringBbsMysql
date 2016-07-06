@@ -95,7 +95,8 @@ form {
 
 #footer {
 	clear: both;
-	width: 1000px;
+	position: relative;
+	top: 7px;
 	height: 70px;
 	font-size: 11px;
 	color: #8d8d8d;

@@ -45,7 +45,7 @@ if (requestUri == null) {
     </div>
     
 	<div id="container">
-		<div id="content" style="min-height: 800px;">
+		<div id="content">
 			<div id="url-navi">Error</div>
 
 <!-- contents begin -->
