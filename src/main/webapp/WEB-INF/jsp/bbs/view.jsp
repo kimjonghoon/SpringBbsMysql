@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <!DOCTYPE html>
@@ -60,7 +61,9 @@
 </tr>
 </table>
 <div id="gul-content">
-    <span id="date-writer-hit">edited ${regdate } by ${name } hit ${hit }</span>
+    <span id="date-writer-hit">edited
+    	<fmt:formatDate pattern="yyyy.MM.dd HH:mm:ss" value="${regdate }" />
+		by ${name } hit ${hit }</span>
     <p>${content }</p>
     <p id="file-list" style="text-align: right">
     	<c:forEach var="file" items="${attachFileList }" varStatus="status">
@@ -180,7 +183,7 @@
 		<span class="bbs-strong">[${article.commentNum }]</span>
 		</c:if>		
 	</td>
-	<td style="text-align: center;">${article.regdateForList }</td>
+	<td style="text-align: center;"><fmt:formatDate pattern="yyyy.MM.dd" value="${article.regdate }" /></td>
 	<td style="text-align: center;">${article.hit }</td>
 </tr>
 </c:forEach>

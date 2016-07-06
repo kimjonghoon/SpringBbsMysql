@@ -4,12 +4,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="Keywords" content="<spring:message code="java.keywords" />" />
 <meta name="Description" content="<spring:message code="java.description" />" />
 <title><spring:message code="java.title" /></title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
 </head>
 <body>
 

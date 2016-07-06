@@ -8,10 +8,10 @@ String contextPath = request.getContextPath();
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <title>403</title>
 <link rel="stylesheet" href="<%=contextPath %>/css/screen.css" type="text/css" />
-<script type="text/javascript" src="<%=contextPath %>/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="<%=contextPath %>/js/jquery-3.0.0.min.js"></script>
 </head>
 <body>
 <div id="wrap">

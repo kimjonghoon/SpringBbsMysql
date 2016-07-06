@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="Keywords" content="<spring:message code="bbs.list.keywords" />" />
 <meta name="Description" content="<spring:message code="bbs.list.description" />" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
 <title>BBS</title>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
 function goList(curPage) {
 	var form = document.getElementById("listForm");
@@ -71,7 +72,9 @@ function goWrite() {
 				<span class="bbs-strong">[${article.commentNum }]</span>
 			</c:if>
 		</td>
-		<td style="text-align: center;">${article.regdateForList }</td>
+		<td style="text-align: center;">
+			<fmt:formatDate pattern="yyyy.MM.dd" value="${article.regdate }" />
+		</td>
 		<td style="text-align: center;">${article.hit }</td>
 	</tr>
 	</c:forEach>

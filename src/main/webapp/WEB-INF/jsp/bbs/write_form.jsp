@@ -6,32 +6,26 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="Keywords" content="<spring:message code="bbs.write.keywords" />" />
 <meta name="Description" content="<spring:message code="bbs.write.description" />" />
 <title>BBS</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
-//<![CDATA[
-           
 function check() {
     //var form = document.getElementById("writeForm");
     //TODO Validation login add 
     return true;
 }
-
 function goList() {
     var form = document.getElementById("listForm");
     form.submit();
 }
-
 function goView() {
     var form = document.getElementById("viewForm");
     form.submit();
 }
-
-//]]>                    
 </script>
 </head>
 <body>
