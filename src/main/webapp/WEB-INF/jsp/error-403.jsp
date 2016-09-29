@@ -26,13 +26,11 @@
     
 	<div id="container">
 		<div id="content">
-			<div id="url-navi">403</div>
-<!-- contents begin -->
-<h1>403</h1>
-Access is Denied.
-<!--  contents end -->
+			<div id="url-navi">error-403</div>
+			<h1>Error 403</h1>
+			Access is Denied.
 		</div>
-    </div>
+	</div>
     
 	<div id="sidebar">
 		<h1>Error</h1>

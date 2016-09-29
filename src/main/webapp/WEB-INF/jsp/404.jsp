@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
-<title>403</title>
+<title>404</title>
 <link rel="stylesheet" href="/css/screen.css" type="text/css" />
 <script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 </head>
@@ -26,11 +26,9 @@
     
 	<div id="container">
 		<div id="content">
-			<div id="url-navi">403</div>
-<!-- contents begin -->
-<h1>403</h1>
-Access is Denied.
-<!--  contents end -->
+			<div id="url-navi">404</div>
+			<h1>404</h1>
+			그런 페이지가 없습니다.
 		</div>
     </div>
     

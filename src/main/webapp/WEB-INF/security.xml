@@ -18,7 +18,8 @@
 		<intercept-url pattern="/css/**" access="permitAll" />
 		<intercept-url pattern="/js/**" access="permitAll" />
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+		<intercept-url pattern="/users/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+		<intercept-url pattern="/bbs/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
 
 		<form-login login-page="/users/login"
 			authentication-failure-url="/users/login?error=1" default-target-url="/bbs/list?boardCd=free&amp;curPage=1" />
@@ -26,8 +27,7 @@
 		<logout logout-success-url="/" invalidate-session="true" />
 
 		<session-management>
-			<concurrency-control max-sessions="1"
-				error-if-maximum-exceeded="true" />
+			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
 		</session-management>
 
 	</http>
