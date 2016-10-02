@@ -10,7 +10,7 @@ public interface BoardService {
 	
 	//목록
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-	public List<Article> getArticleList(String boardCd, String searchWord);
+	public List<Article> getArticleList(String boardCd, String searchWord, Integer offset, Integer rowCount);
 	
 	//총 레코드 수
 	public int getTotalRecord(String boardCd, String searchWord);

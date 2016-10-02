@@ -10,8 +10,8 @@
 <meta name="Keywords" content="<spring:message code="home.keywords" />" />
 <meta name="Description" content="<spring:message code="home.description" />" />
 <title><spring:message code="home.title" /></title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
+<link rel="stylesheet" href="/css/screen.css" type="text/css" />
+<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 </head>
 <body>
 
@@ -27,11 +27,7 @@
     
 	<div id="container">
 		<div id="content">
-
-<!-- contents begin -->
-<div id="url-navi">HomePage</div>
-<!--  contents end -->
-		
+			<div id="url-navi">HomePage</div>
 		</div>
     </div>
     

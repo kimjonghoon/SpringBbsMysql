@@ -11,13 +11,13 @@
 <script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 </head>
 <body>
+<%
+Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
+%>
 <div id="wrap">
 
     <div id="header">
-     	<h1 style="float: left; width:150px;"><a href="/"><img src="/images/ci.gif" alt="java-school logo" /></a></h1>
-    	<div id="memberMenu" style="float: right;position: relative; top: 7px;">
-    	<!-- 뷰 레벨 인증을 에러 페이지에 쓸 수 없다. -->
-    	</div>
+    	<%@ include file="inc/header.jsp" %>
     </div>
     
     <div id="main-menu">
@@ -29,6 +29,14 @@
 			<div id="url-navi">error-403</div>
 			<h1>Error 403</h1>
 			Access is Denied.
+<%
+if (throwable != null) {
+    out.write("<h3>Exception Details</h3>");
+    out.write("<li>Exception Name:" + throwable.getClass().getName() + "</li>");
+    out.write("<li>Exception Message:" + throwable.getMessage() + "</li>");
+    out.write("</ul>");
+}
+%>			
 		</div>
 	</div>
     

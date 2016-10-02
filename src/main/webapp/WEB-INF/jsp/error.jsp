@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%
-String contextPath = request.getContextPath();
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -11,8 +8,8 @@ String contextPath = request.getContextPath();
 <meta name="Keywords" content="Error" />
 <meta name="Description" content="Error" />
 <title>Error</title>
-<link rel="stylesheet" href="<%=contextPath %>/css/screen.css" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
+<link rel="stylesheet" href="/css/screen.css" type="text/css" />
+<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 </head>
 <body>
 <%
@@ -34,10 +31,7 @@ if (requestUri == null) {
 <div id="wrap">
 
     <div id="header">
-     	<h1 style="float: left; width:150px;"><a href="<%=contextPath %>/"><img src="<%=contextPath %>/images/ci.gif" alt="java-school logo" /></a></h1>
-    	<div id="memberMenu" style="float: right;position: relative; top: 7px;">
-    	<!-- 뷰 레벨 인증을 에러 페이지에 쓸 수 없다. -->
-    	</div>
+    	<%@ include file="inc/header.jsp" %>
     </div>
     
     <div id="main-menu">

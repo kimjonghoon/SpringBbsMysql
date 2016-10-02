@@ -14,10 +14,7 @@
 <div id="wrap">
 
     <div id="header">
-     	<h1 style="float: left; width:150px;"><a href="/"><img src="/images/ci.gif" alt="java-school logo" /></a></h1>
-    	<div id="memberMenu" style="float: right;position: relative; top: 7px;">
-    	<!-- 뷰 레벨 인증을 에러 페이지에 쓸 수 없다. -->
-    	</div>
+    	<%@ include file="inc/header.jsp" %>
     </div>
     
     <div id="main-menu">
@@ -27,10 +24,8 @@
 	<div id="container">
 		<div id="content">
 			<div id="url-navi">403</div>
-<!-- contents begin -->
-<h1>403</h1>
-Access is Denied.
-<!--  contents end -->
+			<h1>403</h1>
+			Access is Denied.
 		</div>
     </div>
     

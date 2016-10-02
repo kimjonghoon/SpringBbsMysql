@@ -16,7 +16,7 @@
     <div id="header">
      	<h1 style="float: left; width:150px;"><a href="/"><img src="/images/ci.gif" alt="java-school logo" /></a></h1>
     	<div id="memberMenu" style="float: right;position: relative; top: 7px;">
-    	<!-- 뷰 레벨 인증을 에러 페이지에 쓸 수 없다. -->
+    	<!-- web.xml 설정으로 보이는 에러 페이지에는 뷰 레벨 인증이 작동할지 않는다. -->
     	</div>
     </div>
     
