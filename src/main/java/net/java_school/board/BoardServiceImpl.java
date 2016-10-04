@@ -6,15 +6,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.java_school.commons.PagingHelper;
 import net.java_school.mybatis.BoardMapper;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardMapper boardMapper;
-	private PagingHelper pagingHelper; //페이징 처리 유틸리티 클래스
 	
+	//게시판 목록
+	@Override
+	public List<Board> getListOfBoardCodeBoardName() {
+	    return boardMapper.selectListOfBoardCodeBoardName();
+	}
+	@Override
+	public List<Board> getListOfBoardCodeBoardKoreanName() {
+	    return boardMapper.selectListOfBoardCodeBoardKoreanName();
+	}	
 	//목록
 	@Override
 	public List<Article> getArticleList(String boardCd, String searchWord, Integer offset, Integer rowCount) {
@@ -143,36 +150,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Comment getComment(int commentNo) {
 		return boardMapper.selectOneComment(commentNo);
-	}
-	
-	@Override
-	public int getListItemNo() {
-		return pagingHelper.getListItemNo();
-	}
-	
-	@Override
-	public int getPrevPage() {
-		return pagingHelper.getPrevPage();
-	}
-	
-	@Override
-	public int getFirstPage() {
-		return pagingHelper.getFirstPage();
-	}
-	
-	@Override
-	public int getLastPage() {
-		return pagingHelper.getLastPage();
-	}
-	
-	@Override
-	public int getNextPage() {
-		return pagingHelper.getNextPage();
-	}
-
-	@Override
-	public void setPagingHelper(PagingHelper pagingHelper) {
-		this.pagingHelper = pagingHelper;
 	}
 
 }

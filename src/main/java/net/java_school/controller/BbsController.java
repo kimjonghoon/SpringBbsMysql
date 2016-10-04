@@ -8,15 +8,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import net.java_school.board.Article;
 import net.java_school.board.AttachFile;
+import net.java_school.board.Board;
 import net.java_school.board.BoardService;
 import net.java_school.board.Comment;
-import net.java_school.commons.PagingHelper;
 import net.java_school.commons.WebContants;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,19 @@ public class BbsController {
 		return map;
 	}
 
+	private List<Board> getBoards(String lang) {
+	    switch (lang) {
+	    case "en":
+	        return boardService.getListOfBoardCodeBoardName();
+	    case "ko":
+	        return boardService.getListOfBoardCodeBoardKoreanName();
+	    default:
+	        return boardService.getListOfBoardCodeBoardName();//설정에서 로케일 디폴트를 영어로 설정했으므로 
+	    }
+	}
+	
 	@RequestMapping(value="/list", method=RequestMethod.GET)
-	public String list(String boardCd, Integer curPage, String searchWord, Model model) {
+	public String list(String boardCd, Integer curPage, String searchWord, Locale locale, Model model) {
 
 		int numPerPage = 10;
 		int pagePerBlock = 10;
@@ -108,16 +120,22 @@ public class BbsController {
 		model.addAttribute("nextPage", map.get("nextPage"));
 		model.addAttribute("firstPage", map.get("firstPage"));
 		model.addAttribute("lastPage", map.get("lastPage"));
-
+		
+		List<Board> boards = this.getBoards(locale.getLanguage());
+		model.addAttribute("boards", boards);
+		
 		return "bbs/list";
 
 	}
 
 	@RequestMapping(value="/write_form", method=RequestMethod.GET)
-	public String writeForm(String boardCd, Model model) {
+	public String writeForm(String boardCd, Locale locale, Model model) {
 		String boardNm = boardService.getBoardNm(boardCd);
 		model.addAttribute("boardNm", boardNm);
 		model.addAttribute("article", new Article());
+
+		List<Board> boards = this.getBoards(locale.getLanguage());
+		model.addAttribute("boards", boards);
 
 		return "bbs/write_form";
 	}
@@ -127,11 +145,14 @@ public class BbsController {
 			BindingResult bindingResult,
 			Model model,
 			MultipartHttpServletRequest mpRequest,
+			Locale locale,
 			Principal principal) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			String boardNm = boardService.getBoardNm(article.getBoardCd());
 			model.addAttribute("boardNm", boardNm);
+			List<Board> boards = this.getBoards(locale.getLanguage());
+			model.addAttribute("boards", boards);
 
 			return "bbs/write_form";
 		}
@@ -174,6 +195,7 @@ public class BbsController {
 			String boardCd, 
 			Integer curPage,
 			String searchWord,
+			Locale locale,
 			Model model) {
 
 		boardService.increaseHit(articleNo);
@@ -222,6 +244,9 @@ public class BbsController {
 		model.addAttribute("firstPage", map.get("firstPage"));
 		model.addAttribute("lastPage", map.get("lastPage"));
 
+		List<Board> boards = this.getBoards(locale.getLanguage());
+		model.addAttribute("boards", boards);
+		
 		return "bbs/view";
 	}
 
@@ -292,6 +317,7 @@ public class BbsController {
 	@RequestMapping(value="/modify_form", method=RequestMethod.GET)
 	public String modifyForm(Integer articleNo, 
 			String boardCd,
+			Locale locale,
 			Model model) {
 
 		Article article = boardService.getArticle(articleNo);
@@ -301,6 +327,9 @@ public class BbsController {
 		model.addAttribute("article", article);
 		model.addAttribute("boardNm", boardNm);
 
+		List<Board> boards = this.getBoards(locale.getLanguage());
+		model.addAttribute("boards", boards);
+
 		return "bbs/modify_form";
 	}
 
@@ -309,12 +338,16 @@ public class BbsController {
 			BindingResult bindingResult,
 			Integer curPage,
 			String searchWord,
+			Locale locale,
 			Model model,
 			MultipartHttpServletRequest mpRequest) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			String boardNm = boardService.getBoardNm(article.getBoardCd());
 			model.addAttribute("boardNm", boardNm);
+
+			List<Board> boards = this.getBoards(locale.getLanguage());
+			model.addAttribute("boards", boards);
 
 			return "bbs/modify_form";
 		}
@@ -337,8 +370,6 @@ public class BbsController {
 				fileList.add(multiFile);
 			}
 		}
-
-
 
 		//파일데이터 삽입
 		int size = fileList.size();

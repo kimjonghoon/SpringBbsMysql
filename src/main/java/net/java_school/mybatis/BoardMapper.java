@@ -7,9 +7,14 @@ import org.apache.ibatis.annotations.Param;
 
 import net.java_school.board.Article;
 import net.java_school.board.AttachFile;
+import net.java_school.board.Board;
 import net.java_school.board.Comment;
 
 public interface BoardMapper {
+	//게시판 목록
+	public List<Board> selectListOfBoardCodeBoardName();
+	public List<Board> selectListOfBoardCodeBoardKoreanName();
+	
 	//목록
 	public List<Article> selectListOfArticles(
 			@Param("boardCd") String boardCd,
