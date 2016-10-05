@@ -61,9 +61,9 @@ public interface BoardService {
 	@PreAuthorize("#attachFile.email == principal.username or hasRole('ROLE_ADMIN')")
 	public void removeAttachFile(AttachFile attachFile);
 
-	//게시판 이름
+	//게시판
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-	public String getBoardNm(String boardCd);
+	public Board getBoard(String boardCd);
 
 	//댓글 쓰기
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")

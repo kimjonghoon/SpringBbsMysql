@@ -110,10 +110,10 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.deleteFile(attachFile.getAttachFileNo());
 	}
 
-	//게시판 이름
+	//게시판
 	@Override
-	public String getBoardNm(String boardCd) {
-		return boardMapper.selectOneBoardName(boardCd);
+	public Board getBoard(String boardCd) {
+		return boardMapper.selectOneBoard(boardCd);
 	}
 
 	//댓글 쓰기

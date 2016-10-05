@@ -100,9 +100,23 @@ public class BbsController {
 	    }
 	}
 	
+	private String getBoardNm(String boardCd, String lang) {
+		Board board = boardService.getBoard(boardCd);
+		
+		switch (lang) {
+		case "en":
+			return board.getBoardNm();
+		case "ko":
+			return board.getBoardNm_ko();
+		default:
+			return board.getBoardNm();
+		}
+	}
+	
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public String list(String boardCd, Integer curPage, String searchWord, Locale locale, Model model) {
-
+		String lang = locale.getLanguage();
+		
 		int numPerPage = 10;
 		int pagePerBlock = 10;
 
@@ -111,7 +125,7 @@ public class BbsController {
 		Map<String,Integer> map = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
 		Integer offset = map.get("offset");
 		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
-		String boardNm = boardService.getBoardNm(boardCd);
+		String boardNm = this.getBoardNm(boardCd, lang);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("boardNm", boardNm);
@@ -121,7 +135,7 @@ public class BbsController {
 		model.addAttribute("firstPage", map.get("firstPage"));
 		model.addAttribute("lastPage", map.get("lastPage"));
 		
-		List<Board> boards = this.getBoards(locale.getLanguage());
+		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
 		
 		return "bbs/list";
@@ -130,11 +144,12 @@ public class BbsController {
 
 	@RequestMapping(value="/write_form", method=RequestMethod.GET)
 	public String writeForm(String boardCd, Locale locale, Model model) {
-		String boardNm = boardService.getBoardNm(boardCd);
+		String lang = locale.getLanguage();
+		String boardNm = this.getBoardNm(boardCd, lang);
 		model.addAttribute("boardNm", boardNm);
 		model.addAttribute("article", new Article());
 
-		List<Board> boards = this.getBoards(locale.getLanguage());
+		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
 
 		return "bbs/write_form";
@@ -149,7 +164,7 @@ public class BbsController {
 			Principal principal) throws Exception {
 
 		if (bindingResult.hasErrors()) {
-			String boardNm = boardService.getBoardNm(article.getBoardCd());
+			String boardNm = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
 			model.addAttribute("boardNm", boardNm);
 			List<Board> boards = this.getBoards(locale.getLanguage());
 			model.addAttribute("boards", boards);
@@ -197,7 +212,9 @@ public class BbsController {
 			String searchWord,
 			Locale locale,
 			Model model) {
-
+		
+		String lang = locale.getLanguage();
+		
 		boardService.increaseHit(articleNo);
 
 		Article article = boardService.getArticle(articleNo);//상세보기에서 볼 게시글
@@ -205,7 +222,7 @@ public class BbsController {
 		Article nextArticle = boardService.getNextArticle(articleNo, boardCd, searchWord);
 		Article prevArticle = boardService.getPrevArticle(articleNo, boardCd, searchWord);
 		List<Comment> commentList = boardService.getCommentList(articleNo);
-		String boardNm = boardService.getBoardNm(boardCd);
+		String boardNm = this.getBoardNm(boardCd, lang);
 
 		//상세보기에서 볼 게시글 관련 정보
 		String title = article.getTitle();//제목
@@ -244,7 +261,7 @@ public class BbsController {
 		model.addAttribute("firstPage", map.get("firstPage"));
 		model.addAttribute("lastPage", map.get("lastPage"));
 
-		List<Board> boards = this.getBoards(locale.getLanguage());
+		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
 		
 		return "bbs/view";
@@ -320,14 +337,15 @@ public class BbsController {
 			Locale locale,
 			Model model) {
 
+		String lang = locale.getLanguage();
 		Article article = boardService.getArticle(articleNo);
-		String boardNm = boardService.getBoardNm(boardCd);
+		String boardNm = this.getBoardNm(boardCd, lang);
 
 		//수정페이지에서의 보일 게시글 정보
 		model.addAttribute("article", article);
 		model.addAttribute("boardNm", boardNm);
 
-		List<Board> boards = this.getBoards(locale.getLanguage());
+		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
 
 		return "bbs/modify_form";
@@ -343,7 +361,7 @@ public class BbsController {
 			MultipartHttpServletRequest mpRequest) throws Exception {
 
 		if (bindingResult.hasErrors()) {
-			String boardNm = boardService.getBoardNm(article.getBoardCd());
+			String boardNm = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
 			model.addAttribute("boardNm", boardNm);
 
 			List<Board> boards = this.getBoards(locale.getLanguage());

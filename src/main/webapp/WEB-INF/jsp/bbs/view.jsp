@@ -10,7 +10,7 @@
 <meta charset="UTF-8" />
 <meta name="Keywords" content="<spring:message code="bbs.view.keywords" />" />
 <meta name="Description" content="<spring:message code="bbs.view.description" />" />
-<title>BBS</title>
+<title>${title }</title>
 <link rel="stylesheet" href="/css/screen.css" type="text/css" />
 <script src="/js/jquery-3.0.0.min.js"></script>
 <script src="/js/bbs-view.js"></script>
@@ -32,7 +32,7 @@
 
 <!-- contents begin -->
 <div id="url-navi">BBS</div>
-<h1><spring:message code="bbs.board.${param.boardCd }" /></h1>
+<h1>${boardNm }</h1>
 <div id="bbs">
 
 <div class="view-menu" style="margin-bottom: 5px;">

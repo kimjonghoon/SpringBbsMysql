@@ -9,9 +9,9 @@
 <meta charset="UTF-8"/>
 <meta name="Keywords" content="<spring:message code="bbs.list.keywords" />" />
 <meta name="Description" content="<spring:message code="bbs.list.description" />" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
+<link rel="stylesheet" href="/css/screen.css" type="text/css" />
 <title>BBS</title>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
+<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
 function goList(curPage) {
 	var form = document.getElementById("listForm");
@@ -49,7 +49,7 @@ function goWrite() {
 <!-- contents begin -->			
 <div id="url-navi">BBS</div>
 
-<h1><spring:message code="bbs.board.${param.boardCd }" /></h1>
+<h1>${boardNm }</h1>
 <div id="bbs">
 	<!-- BBS Headings -->
 	<table>

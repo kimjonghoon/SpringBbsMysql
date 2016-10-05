@@ -124,8 +124,8 @@
 		DELETE FROM attachfile WHERE attachfileno = #{attachFileNo}
 	</delete>
 
-	<select id="selectOneBoardName" parameterType="string" resultType="string">
-		SELECT boardNm FROM board WHERE boardcd = #{boardCd}
+	<select id="selectOneBoard" parameterType="string" resultType="Board">
+		SELECT * FROM board WHERE boardcd = #{boardCd}
 	</select>
 
 	<insert id="insertComment" parameterType="Comment">

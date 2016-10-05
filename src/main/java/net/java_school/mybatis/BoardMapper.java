@@ -55,8 +55,8 @@ public interface BoardMapper {
 	//첨부파일 삭제
 	public void deleteFile(int attachFileNo);	
 	
-	//게시판 이름
-	public String selectOneBoardName(String boardCd);
+	//게시판
+	public Board selectOneBoard(String boardCd);
 
 	//댓글 쓰기
 	public void insertComment(Comment comment);	

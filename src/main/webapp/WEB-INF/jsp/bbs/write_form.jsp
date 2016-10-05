@@ -9,9 +9,9 @@
 <meta charset="UTF-8"/>
 <meta name="Keywords" content="<spring:message code="bbs.write.keywords" />" />
 <meta name="Description" content="<spring:message code="bbs.write.description" />" />
-<title>BBS</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/screen.css" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.0.0.min.js"></script>
+<title>New</title>
+<link rel="stylesheet" href="/css/screen.css" type="text/css" />
+<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
 function check() {
     //var form = document.getElementById("writeForm");
@@ -45,7 +45,7 @@ function goView() {
 
 <!--  contents begin -->
 <div id="url-navi">BBS</div>
-<h1><spring:message code="bbs.board.${param.boardCd }" /></h1>
+<h1>${boardNm }</h1>
 <div id="bbs">
 <h2><spring:message code="bbs.new.article" /></h2>
 <sf:form id="writeForm" action="write?${_csrf.parameterName}=${_csrf.token}" method="post" commandName="article" enctype="multipart/form-data" onsubmit="return check();">
