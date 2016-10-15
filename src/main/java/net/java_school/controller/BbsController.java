@@ -5,11 +5,9 @@ import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -18,6 +16,8 @@ import net.java_school.board.AttachFile;
 import net.java_school.board.Board;
 import net.java_school.board.BoardService;
 import net.java_school.board.Comment;
+import net.java_school.commons.NumbersForPaging;
+import net.java_school.commons.NumbersGeneratorForPaging;
 import net.java_school.commons.WebContants;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,78 +31,25 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
 @RequestMapping("/bbs")
-public class BbsController {
+public class BbsController extends NumbersGeneratorForPaging {
 
 	@Autowired
 	private BoardService boardService;
 
-	private Map<String,Integer> getNumbersForPaging(int totalRecord, int curPage, int numPerPage, int pagePerBlock) {
-		//총 페이지 수
-		int totalPage = totalRecord / numPerPage;
-		if (totalRecord % numPerPage != 0) totalPage++;
-
-		//총 블록 수
-		int totalBlock = totalPage / pagePerBlock;
-		if (totalPage % pagePerBlock != 0) totalBlock++;
-
-		//현재 블록
-		int block = curPage / pagePerBlock;
-		if (curPage % pagePerBlock != 0) block++;
-
-		//현재 블록에 속한 첫 번째 페이지 번호와 마지막 페이지 번호
-		int firstPage = (block - 1) * pagePerBlock + 1;
-		int lastPage = block * pagePerBlock;
-
-		//현재 블록이 1보다 크다면 [이전] 링크를 위한 페이지 번호 계산
-		int prevPage = 0;
-		if (block > 1) {
-			prevPage = firstPage - 1;
-		}
-
-		//현재 블록이 총 블록 수(마지막 블록 번호)보다 작다면 [다음] 링크를 위한 페이지 번호 계산
-		int nextPage = 0; 
-		if (block < totalBlock) {
-			nextPage = lastPage + 1;
-		}
-
-		//현재 블록이 마지막 블록이라면 현재 블록의 마지막 페이지 번호를 총 페이지 수로 변경
-		if (block >= totalBlock) {
-			lastPage = totalPage;
-		}
-
-		//현재 페이지의 목록 아이템 앞에 붙일 번호 계산
-		int listItemNo = totalRecord - (curPage - 1) * numPerPage;
-
-		//현재 페이지의 목록을 위한 MySQL LIMIT 연산자의 offset 계산
-		int offset = (curPage - 1) * numPerPage;
-
-		HashMap<String,Integer> map = new HashMap<String,Integer>();
-
-		map.put("totalPage",totalPage);
-		map.put("firstPage",firstPage);
-		map.put("lastPage",lastPage);
-		map.put("prevPage",prevPage);
-		map.put("nextPage",nextPage);
-		map.put("listItemNo",listItemNo);
-		map.put("offset",offset);
-
-		return map;
-	}
-
 	private List<Board> getBoards(String lang) {
-	    switch (lang) {
-	    case "en":
-	        return boardService.getListOfBoardCodeBoardName();
-	    case "ko":
-	        return boardService.getListOfBoardCodeBoardKoreanName();
-	    default:
-	        return boardService.getListOfBoardCodeBoardName();//설정에서 로케일 디폴트를 영어로 설정했으므로 
-	    }
+		switch (lang) {
+		case "en":
+			return boardService.getListOfBoardCodeBoardName();
+		case "ko":
+			return boardService.getListOfBoardCodeBoardKoreanName();
+		default:
+			return boardService.getListOfBoardCodeBoardName();//설정에서 로케일 디폴트를 영어로 설정했으므로 
+		}
 	}
-	
+
 	private String getBoardNm(String boardCd, String lang) {
 		Board board = boardService.getBoard(boardCd);
-		
+
 		switch (lang) {
 		case "en":
 			return board.getBoardNm();
@@ -112,32 +59,32 @@ public class BbsController {
 			return board.getBoardNm();
 		}
 	}
-	
+
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public String list(String boardCd, Integer curPage, String searchWord, Locale locale, Model model) {
 		String lang = locale.getLanguage();
-		
+
 		int numPerPage = 10;
 		int pagePerBlock = 10;
 
 		int totalRecord = boardService.getTotalRecord(boardCd, searchWord);
-		
-		Map<String,Integer> map = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
-		Integer offset = map.get("offset");
+
+		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
+		Integer offset = ints.getOffset();
 		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
 		String boardNm = this.getBoardNm(boardCd, lang);
-		
+
 		model.addAttribute("list", list);
 		model.addAttribute("boardNm", boardNm);
-		model.addAttribute("listItemNo", map.get("listItemNo"));
-		model.addAttribute("prevPage", map.get("prevPage"));
-		model.addAttribute("nextPage", map.get("nextPage"));
-		model.addAttribute("firstPage", map.get("firstPage"));
-		model.addAttribute("lastPage", map.get("lastPage"));
-		
+		model.addAttribute("listItemNo", ints.getListItemNo());
+		model.addAttribute("prevPage", ints.getPrevPage());
+		model.addAttribute("nextPage", ints.getNextPage());
+		model.addAttribute("firstPage", ints.getFirstPage());
+		model.addAttribute("lastPage", ints.getLastPage());
+
 		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
-		
+
 		return "bbs/list";
 
 	}
@@ -212,9 +159,9 @@ public class BbsController {
 			String searchWord,
 			Locale locale,
 			Model model) {
-		
+
 		String lang = locale.getLanguage();
-		
+
 		boardService.increaseHit(articleNo);
 
 		Article article = boardService.getArticle(articleNo);//상세보기에서 볼 게시글
@@ -249,21 +196,21 @@ public class BbsController {
 		int pagePerBlock = 10;//블록당 페이지 링크수
 
 		int totalRecord = boardService.getTotalRecord(boardCd, searchWord);
-		Map<String,Integer> map = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
-		Integer offset = map.get("offset");
+		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
+		Integer offset = ints.getOffset();
 		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
-		
+
 		model.addAttribute("list", list);
 		model.addAttribute("boardNm", boardNm);
-		model.addAttribute("listItemNo", map.get("listItemNo"));
-		model.addAttribute("prevPage", map.get("prevPage"));
-		model.addAttribute("nextPage", map.get("nextPage"));
-		model.addAttribute("firstPage", map.get("firstPage"));
-		model.addAttribute("lastPage", map.get("lastPage"));
+		model.addAttribute("listItemNo", ints.getListItemNo());
+		model.addAttribute("prevPage", ints.getPrevPage());
+		model.addAttribute("nextPage", ints.getNextPage());
+		model.addAttribute("firstPage", ints.getFirstPage());
+		model.addAttribute("lastPage", ints.getLastPage());
 
 		List<Board> boards = this.getBoards(lang);
 		model.addAttribute("boards", boards);
-		
+
 		return "bbs/view";
 	}
 
@@ -412,13 +359,6 @@ public class BbsController {
 
 	}
 
-	/*    @RequestMapping(value="/download", method=RequestMethod.POST)
-    public String download(String filename, Model model) {
-        model.addAttribute("filename", filename);
-
-        return "inc/download";
-    }
-	 */
 	@RequestMapping(value="/deleteAttachFile", method=RequestMethod.POST)
 	public String deleteAttachFile(Integer attachFileNo, 
 			Integer articleNo, 

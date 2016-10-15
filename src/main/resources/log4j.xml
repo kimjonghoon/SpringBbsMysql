@@ -16,7 +16,7 @@
         </layout>
     </appender>
     
-    <logger name="net.java_school">
+    <logger name="net.java_school.mybatis.BoardMapper">
         <level value="DEBUG"/>
         <appender-ref ref="file"/>
     </logger>

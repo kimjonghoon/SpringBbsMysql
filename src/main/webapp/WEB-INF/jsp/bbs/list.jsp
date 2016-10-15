@@ -3,15 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8"/>
-<meta name="Keywords" content="<spring:message code="bbs.list.keywords" />" />
-<meta name="Description" content="<spring:message code="bbs.list.description" />" />
-<link rel="stylesheet" href="/css/screen.css" type="text/css" />
-<title>BBS</title>
-<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
 function goList(curPage) {
 	var form = document.getElementById("listForm");
@@ -30,23 +21,7 @@ function goWrite() {
 	form.submit();
 }
 </script>           
-</head>
-<body>
 
-<div id="wrap">
-
-	<div id="header">
-		<%@ include file="../inc/header.jsp" %>
-	</div>
-
-	<div id="main-menu">
-		<%@ include file="../inc/main-menu.jsp" %>
-	</div>
-
-	<div id="container">
-		<div id="content">
-
-<!-- contents begin -->			
 <div id="url-navi">BBS</div>
 
 <h1>${boardNm }</h1>
@@ -66,7 +41,7 @@ function goWrite() {
 		<td>
 			<a href="javascript:goView('${article.articleNo }')">${article.title }</a>
 			<c:if test="${article.attachFileNum > 0 }">
-				<img src="../images/attach.png" alt="<spring:message code="global.attach.file" />" />
+				<img src="/resources/images/attach.png" alt="<spring:message code="global.attach.file" />" />
 			</c:if>
 			<c:if test="${article.commentNum > 0 }">
 				<span class="bbs-strong">[${article.commentNum }]</span>
@@ -120,24 +95,6 @@ function goWrite() {
 	</div>
 	
 </div>
-<!--  contents end -->
-
-		</div><!-- #content end -->
-	</div><!--  #container end -->
-	
-	<div id="sidebar">
-		<%@ include file="bbs-menu.jsp" %>
-	</div>
-	
-	<div id="extra">
-		<%@ include file="../inc/extra.jsp" %>
-	</div>
-
-	<div id="footer">
-		<%@ include file="../inc/footer.jsp" %>
-	</div>
-
-</div>
 
 <div id="form-group">
 	<form id="listForm" action="list" method="get">
@@ -163,6 +120,3 @@ function goWrite() {
 		</p>
 	</form>
 </div>
-
-</body>
-</html>

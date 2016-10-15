@@ -1,5 +1,7 @@
 package net.java_school.user;
 
+import java.util.List;
+
 import net.java_school.mybatis.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +75,37 @@ public class UserServiceImpl implements UserService {
 		return userMapper.selectOne(email);
 	}
 
+	@Override
+	public List<User> getUsers(String search, Integer offset, Integer rowCount) {
+		return userMapper.selectList(search, offset, rowCount);
+	}
+
+	@Override
+	public int getTotalCount(String search) {
+		return userMapper.selectTotalCount(search);
+	}
+	
+	@Override
+	public void editAccountByAdmin(User user) {
+		userMapper.update(user);
+	}
+	
+	@Override
+	public void changePasswdByAdmin(User user) {
+		String encodedPasswd = this.bcryptPasswordEncoder.encode(user.getPasswd());
+		user.setPasswd(encodedPasswd);
+		
+		userMapper.updatePasswdByAdmin(user);
+	}
+	
+	@Override
+	public void changeAuthority(User user) {
+		userMapper.updateAuthority(user);
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		userMapper.deleteAuthority(user.getEmail());
+		userMapper.delete(user);
+	}
 }

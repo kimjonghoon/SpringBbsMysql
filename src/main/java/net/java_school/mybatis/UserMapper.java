@@ -1,5 +1,7 @@
 package net.java_school.mybatis;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import net.java_school.user.User;
@@ -24,5 +26,16 @@ public interface UserMapper {
   public void deleteAuthority(@Param("email") String email);
   
   public User selectOne(String email);
+  
+  public List<User> selectList(
+		  @Param("search") String search, 
+		  @Param("offset") Integer offset, 
+		  @Param("rowCount") Integer rowCount);	
+
+  public int selectTotalCount(@Param("search") String search);
+  
+  public void updatePasswdByAdmin(User user);
+  
+  public void updateAuthority(User user);
     
 }

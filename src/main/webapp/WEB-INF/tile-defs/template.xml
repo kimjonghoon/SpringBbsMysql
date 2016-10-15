@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC  
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="defaultTemplate" template="/WEB-INF/jsp/template/template.jsp">
+        <put-attribute name="header" value="/WEB-INF/jsp/inc/header.jsp" />
+        <put-attribute name="main-menu" value="/WEB-INF/jsp/inc/main-menu.jsp" />
+        <put-attribute name="extra" value="/WEB-INF/jsp/inc/extra.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/jsp/inc/footer.jsp" />
+    </definition>
+    <!-- Homepage -->
+    <definition name="index" extends="defaultTemplate">
+        <put-attribute name="title" value="Homepage" />
+        <put-attribute name="keywords" value="homepage" />
+        <put-attribute name="description" value="Welcome to Java-School" />
+        <put-attribute name="content" value="/WEB-INF/jsp/index.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/index-menu.jsp" />
+    </definition>
+	<!-- Error Page -->
+	<definition name="403" extends="defaultTemplate">
+		<put-attribute name="title" value="403 Error" />
+		<put-attribute name="keywords" value="403 Eoor" />
+		<put-attribute name="description" value="403 by Spring Security Filter Control" />
+		<put-attribute name="content" value="/WEB-INF/jsp/403.jsp" />
+		<put-attribute name="sidebar" value="/WEB-INF/jsp/error-menu.jsp" />
+	</definition>
+	<definition name="error-403" extends="defaultTemplate">
+		<put-attribute name="title" value="403 Error" />
+		<put-attribute name="keywords" value="403 Error" />
+		<put-attribute name="description" value="403 at Spring MVC" />
+		<put-attribute name="content" value="/WEB-INF/jsp/error-403.jsp" />
+		<put-attribute name="sidebar" value="/WEB-INF/jsp/error-menu.jsp" />
+	</definition>
+	<definition name="error" extends="defaultTemplate">
+		<put-attribute name="title" value="Error" />
+		<put-attribute name="keywords" value="Error" />
+		<put-attribute name="description" value="Errors at Spring MVC" />
+		<put-attribute name="content" value="/WEB-INF/jsp/error.jsp" />
+		<put-attribute name="sidebar" value="/WEB-INF/jsp/error-menu.jsp" />
+	</definition>
+    <!-- User -->
+    <definition name="users/*" extends="defaultTemplate">
+        <put-attribute name="title" value="Membership" />
+        <put-attribute name="keywords" value="Membership" />
+        <put-attribute name="description" value="Membership" />
+        <put-attribute name="content" value="/WEB-INF/jsp/users/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/users/users-menu.jsp" />
+    </definition>
+    <!-- BBS -->
+    <definition name="bbs/*" extends="defaultTemplate">
+        <put-attribute name="title" value="BBS" />
+        <put-attribute name="keywords" value="BBS" />
+        <put-attribute name="description" value="BBS" />
+        <put-attribute name="content" value="/WEB-INF/jsp/bbs/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/bbs/bbs-menu.jsp" />
+    </definition>
+    <!-- admin -->
+    <definition name="admin/*" extends="defaultTemplate">
+        <put-attribute name="title" value="Admin" />
+        <put-attribute name="keywords" value="Admin" />
+        <put-attribute name="description" value="Admin" />
+        <put-attribute name="content" value="/WEB-INF/jsp/admin/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/admin/admin-menu.jsp" />
+    </definition>
+    
+</tiles-definitions>

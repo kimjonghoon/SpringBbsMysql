@@ -15,8 +15,8 @@
   </insert>
   
   <update id="update" parameterType="User">
-    UPDATE member SET name = #{name}, mobile = #{mobile} 
-    WHERE email = #{email} AND passwd = #{passwd}
+    UPDATE member SET name = #{name}, mobile = #{mobile}
+    WHERE email = #{email}
   </update>
 
   <update id="updatePasswd">
@@ -30,13 +30,59 @@
   
   <delete id="deleteAuthority">
     DELETE FROM authorities
-    WHERE email = #{email}	
+    WHERE email = #{email}
   </delete>
 
   <select id="selectOne" parameterType="string" resultType="User">
-    SELECT email, passwd, name, mobile 
-    FROM member 
-    WHERE email = #{email}
+    SELECT m.email, passwd, name, mobile, authority
+    FROM member m, authorities a
+    WHERE m.email = a.email AND m.email = #{email}
   </select>
-    
+  
+  <select id="selectList" resultType="User">
+	SELECT 
+		m.email, name, mobile, authority
+	FROM 
+		member m, authorities a
+	WHERE
+		m.email = a.email
+		<if test="search != null and search != ''">
+		AND (
+			m.email LIKE concat('%', #{search}, '%')
+			OR name LIKE concat('%', #{search}, '%')
+			OR mobile LIKE concat('%', #{search}, '%')
+			OR authority LIKE concat('%', #{search}, '%')
+			)
+		</if>
+	ORDER BY authority ASC,name ASC
+	LIMIT #{offset}, #{rowCount}
+  </select>
+  
+  <select id="selectTotalCount" resultType="int">
+	SELECT 
+		count(*)
+	FROM 
+		member m, authorities a
+	WHERE
+		m.email = a.email
+		<if test="search != null and search != ''">
+		AND (
+			m.email LIKE concat('%', #{search}, '%')
+			OR name LIKE concat('%', #{search}, '%')
+			OR mobile LIKE concat('%', #{search}, '%')
+			OR authority LIKE concat('%', #{search}, '%')
+			)
+		</if>
+  </select>
+
+  <update id="updatePasswdByAdmin" parameterType="User">
+    UPDATE member SET passwd = #{passwd} 
+    WHERE email = #{email}
+  </update>
+
+	<update id="updateAuthority" parameterType="User">
+		UPDATE authorities SET authority = #{authority}
+		WHERE email = #{email}
+	</update>
+
 </mapper>

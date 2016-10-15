@@ -15,6 +15,7 @@ public class User {
 	private String name;
 	@Size(min=6, message="모바일폰 번호형식이 아닙니다.")
 	private String mobile;
+	private String authority;
 	
 	public User() {}
 	
@@ -53,6 +54,14 @@ public class User {
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 	
 	

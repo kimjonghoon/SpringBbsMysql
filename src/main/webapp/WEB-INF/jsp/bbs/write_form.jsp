@@ -3,15 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8"/>
-<meta name="Keywords" content="<spring:message code="bbs.write.keywords" />" />
-<meta name="Description" content="<spring:message code="bbs.write.description" />" />
-<title>New</title>
-<link rel="stylesheet" href="/css/screen.css" type="text/css" />
-<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
 function check() {
     //var form = document.getElementById("writeForm");
@@ -27,24 +18,9 @@ function goView() {
     form.submit();
 }
 </script>
-</head>
-<body>
 
-<div id="wrap">
-
-    <div id="header">
-		<%@ include file="../inc/header.jsp" %>
-    </div>
-    
-    <div id="main-menu">
-		<%@ include file="../inc/main-menu.jsp" %>
-    </div>
-    
-	<div id="container">
-		<div id="content">
-
-<!--  contents begin -->
 <div id="url-navi">BBS</div>
+
 <h1>${boardNm }</h1>
 <div id="bbs">
 <h2><spring:message code="bbs.new.article" /></h2>
@@ -84,24 +60,6 @@ function goView() {
 </div>
 </sf:form>
 </div>
-<!-- contents end -->
-		
-		</div>
-    </div>
-    
-	<div id="sidebar">
-		<%@ include file="bbs-menu.jsp" %>	
-	</div>
-    
-	<div id="extra">
-		<%@ include file="../inc/extra.jsp" %>
-	</div>
-    
-	<div id="footer">
-		<%@ include file="../inc/footer.jsp" %>
-	</div>
-        
-</div>
 
 <div id="form-group" style="display: none">
     <form id="viewForm" action="view" method="get">
@@ -120,6 +78,3 @@ function goView() {
     </p>
     </form>   
 </div>
-
-</body>
-</html>

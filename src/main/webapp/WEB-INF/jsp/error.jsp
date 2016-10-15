@@ -1,17 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="Keywords" content="Error" />
-<meta name="Description" content="Error" />
-<title>Error</title>
-<link rel="stylesheet" href="/css/screen.css" type="text/css" />
-<script type="text/javascript" src="/js/jquery-3.0.0.min.js"></script>
-</head>
-<body>
+
 <%
 //Analyze the servlet exception
 Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
@@ -28,21 +17,8 @@ if (requestUri == null) {
   requestUri = "Unknown";
 }
 %>
-<div id="wrap">
+<div id="url-navi">Error</div>
 
-    <div id="header">
-    	<%@ include file="inc/header.jsp" %>
-    </div>
-    
-    <div id="main-menu">
-    	<%@ include file="inc/main-menu.jsp" %>
-    </div>
-    
-	<div id="container">
-		<div id="content">
-			<div id="url-navi">Error</div>
-
-<!-- contents begin -->
 <h1>Error Page</h1>
 <%
 if(statusCode != 500){
@@ -59,24 +35,3 @@ if (throwable != null) {
     out.write("</ul>");
 }
 %>
-<!--  contents end -->
-		
-		</div>
-    </div>
-    
-	<div id="sidebar">
-		<h1>Error</h1>
-	</div>
-    
-	<div id="extra">
-		<%@ include file="inc/extra.jsp" %>    
-	</div>
-    
-    <div id="footer">
-    	<%@ include file="inc/footer.jsp" %>
-    </div>
-        
-</div>
-
-</body>
-</html>
