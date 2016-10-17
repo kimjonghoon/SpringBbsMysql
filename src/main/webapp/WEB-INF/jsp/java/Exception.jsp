@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <div id="last-modified">Last Modified : 2014.4.11</div>
 
 <h1>예외</h1>

@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <div id="last-modified">Last Modified : 2011.1.7</div>
 
 <h1>SQL 연습 - SELECT 문</h1>

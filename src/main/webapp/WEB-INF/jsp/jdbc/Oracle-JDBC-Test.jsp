@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <div id="last-modified">Last Modified : 2014.5.19</div>
 
 <h1>오라클 JDBC 테스트</h1>

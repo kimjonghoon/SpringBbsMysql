@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <%@ page isELIgnored="true" %>
 <div id="last-modified">Last Modified : 2015.6.4</div>
 

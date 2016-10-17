@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko">
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
+="ko">
 <? require('../inc/common_start.php'); ?>
 <head>
 <meta charset="UTF-8" />

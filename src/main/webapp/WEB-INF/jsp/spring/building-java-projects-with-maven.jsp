@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <div id="last-modified">Last Modified : 2015.1.9</div>
 
 <h1>Maven을 이용한 Spring 실습</h1>
