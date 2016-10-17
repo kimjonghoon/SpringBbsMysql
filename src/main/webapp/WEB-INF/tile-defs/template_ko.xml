@@ -66,13 +66,11 @@
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/admin/admin-menu.jsp" />
 	</definition>
 	<!-- Homepage -->
-	<definition name="index" extends="postsTemplate">
+	<definition name="index" extends="defaultTemplate">
 		<put-attribute name="title" value="홈페이지" />
 		<put-attribute name="keywords" value="홈페이지" />
 		<put-attribute name="description" value="환영합니다." />
 		<put-attribute name="content" value="/WEB-INF/jsp/index_ko.jsp" />
-		<put-attribute name="next-link" value="/java/Features" />
-		<put-attribute name="next-title" value="자바의 특징" />
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/index-menu.jsp" />
 	</definition>
 	<definition name="java/Features" extends="postsTemplate">
@@ -82,8 +80,6 @@
 		<put-attribute name="content" value="/WEB-INF/jsp/java/Features_ko.jsp" />
 		<put-attribute name="next-link" value="Class-Object" />
 		<put-attribute name="next-title" value="객체와 클래스" />
-		<put-attribute name="prev-link" value="/" />
-		<put-attribute name="prev-title" value="JDK 설치" />
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/java/java-sub_ko.jsp" />
 	</definition>
 	<definition name="java/Class-Object" extends="postsTemplate">

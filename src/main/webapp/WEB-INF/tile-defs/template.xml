@@ -9,16 +9,6 @@
 		<put-attribute name="extra" value="/WEB-INF/jsp/inc/extra.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/jsp/inc/footer.jsp" />
 	</definition>
-	<definition name="postsTemplate" template="/WEB-INF/jsp/template/postsTemplate.jsp">
-		<put-attribute name="header" value="/WEB-INF/jsp/inc/header.jsp" />
-		<put-attribute name="main-menu" value="/WEB-INF/jsp/inc/main-menu.jsp" />
-		<put-attribute name="next-link" value="" />
-		<put-attribute name="next-title" value="" />
-		<put-attribute name="prev-link" value="" />
-		<put-attribute name="prev-title" value="" />
-		<put-attribute name="extra" value="/WEB-INF/jsp/inc/extra.jsp" />
-		<put-attribute name="footer" value="/WEB-INF/jsp/inc/footer.jsp" />
-	</definition>
 	<!-- Error Page -->
 	<definition name="403" extends="defaultTemplate">
 		<put-attribute name="title" value="403 Error" />
@@ -67,14 +57,22 @@
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/admin/admin-menu.jsp" />
 	</definition>
 	<!-- Homepage -->
-	<definition name="index" extends="postsTemplate">
+	<definition name="index" extends="defaultTemplate">
 		<put-attribute name="title" value="Homepage" />
 		<put-attribute name="keywords" value="homepage" />
 		<put-attribute name="description" value="Welcome to Java-School" />
 		<put-attribute name="content" value="/WEB-INF/jsp/index.jsp" />
-		<put-attribute name="next-link" value="/java/Features" />
-		<put-attribute name="next-title" value="Java Features" />
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/index-menu.jsp" />
+	</definition>
+	<definition name="postsTemplate" template="/WEB-INF/jsp/template/postsTemplate.jsp">
+		<put-attribute name="header" value="/WEB-INF/jsp/inc/header.jsp" />
+		<put-attribute name="main-menu" value="/WEB-INF/jsp/inc/main-menu.jsp" />
+		<put-attribute name="next-link" value="" />
+		<put-attribute name="next-title" value="" />
+		<put-attribute name="prev-link" value="" />
+		<put-attribute name="prev-title" value="" />
+		<put-attribute name="extra" value="/WEB-INF/jsp/inc/extra.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/inc/footer.jsp" />
 	</definition>
 	<definition name="java/Features" extends="postsTemplate">
 		<put-attribute name="title" value="Features" />
@@ -83,8 +81,6 @@
 		<put-attribute name="content" value="/WEB-INF/jsp/java/Features.jsp" />
 		<put-attribute name="next-link" value="Class-Object" />
 		<put-attribute name="next-title" value="Class and Object" />
-		<put-attribute name="prev-link" value="/" />
-		<put-attribute name="prev-title" value="JDK Install" />
 		<put-attribute name="sidebar" value="/WEB-INF/jsp/java/java-sub.jsp" />
 	</definition>
 	<definition name="java/Class-Object" extends="postsTemplate">
