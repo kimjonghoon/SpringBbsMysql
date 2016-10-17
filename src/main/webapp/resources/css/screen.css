@@ -215,29 +215,29 @@ ul#nav li a:hover {
 	font-size: 15px;
 }
 
-#bbs table {
+.bbs-table {
 	width: 100%;
 	margin: 0 0 7px 0;
 }
 
-#bbs table th {
+.bbs-table th {
 	color: #92B91C;
 	border-top: 1px solid #92B91C;
 	border-bottom: 1px solid #92B91C;
 }
 
-#bbs td {
+.bbs-table td {
 	padding-top: 3px;
 	padding-bottom: 3px;
 	border-bottom: silver 1px solid;
 }
 
-#bbs td a {
+.bbs-table td > a {
 	color: #555;
 	text-decoration: none;
 }
 
-#bbs td a:hover {
+.bbs-table td > a:hover {
 	color:#555;
 	text-decoration: underline;
 }

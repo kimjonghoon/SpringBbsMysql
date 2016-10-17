@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
-<script src="/js/bbs-view.js"></script>
+<script src="/resources/js/bbs-view.js"></script>
 
 <div id="url-navi">BBS</div>
 <h1>${boardNm }</h1>
@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<table>
+<table class="bbs-table">
 <tr>
     <th style="width: 37px;text-align: left;vertical-align: top;">TITLE</th>
     <th style="text-align: left;color: #555;">${title }</th>
@@ -128,7 +128,7 @@
 </div>
 
 <!--  BBS list in detailed Article -->
-<table id="list-table">
+<table id="list-table" class="bbs-table">
 <tr>
 	<th style="width: 60px;">NO</th>
 	<th>TITLE</th>
