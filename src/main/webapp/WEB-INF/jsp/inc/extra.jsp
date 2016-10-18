@@ -7,6 +7,3 @@
 <a href="http://www.youtube.com"><img src="/resources/images/youtube.png" alt="youtube.com" /></a>
 <a href="http://www.gmail.com"><img src="/resources/images/gmail.gif" alt="gmail.com" /></a>
 <a href="http://www.java-school.net"><img src="/resources/images/ci.gif" alt="java-school.net" /></a>
-<security:authorize access="hasRole('ROLE_ADMIN')">
-<a href="/admin?page=1"><img src="/resources/images/admin.png" alt="java-school's Administrator" /></a>
-</security:authorize>
