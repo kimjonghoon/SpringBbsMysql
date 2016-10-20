@@ -24,7 +24,7 @@ function goWrite() {
 
 <div id="url-navi">BBS</div>
 
-<h1>${boardNm }</h1>
+<h1>${boardName }</h1>
 
 <table class="bbs-table">
 <tr>

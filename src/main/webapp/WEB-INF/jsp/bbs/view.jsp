@@ -7,7 +7,8 @@
 <script src="/resources/js/bbs-view.js"></script>
 
 <div id="url-navi">BBS</div>
-<h1>${boardNm }</h1>
+
+<h1>${boardName }</h1>
 
 <div class="view-menu" style="margin-bottom: 5px;">
     <security:authorize access="#email == principal.username or hasRole('ROLE_ADMIN')">

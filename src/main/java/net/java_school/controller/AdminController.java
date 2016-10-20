@@ -3,6 +3,8 @@ package net.java_school.controller;
 import java.net.URLEncoder;
 import java.util.List;
 
+import net.java_school.board.Board;
+import net.java_school.board.BoardService;
 import net.java_school.commons.NumbersForPaging;
 import net.java_school.commons.NumbersGeneratorForPaging;
 import net.java_school.commons.WebContants;
@@ -21,6 +23,9 @@ public class AdminController extends NumbersGeneratorForPaging {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BoardService boardService;
 
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Integer page, String search, Model model) {
@@ -85,6 +90,28 @@ public class AdminController extends NumbersGeneratorForPaging {
 		if (search != null && !search.equals("")) search = URLEncoder.encode(search, "UTF-8");
 
 		return "redirect:/admin?page=" + page + "&search=" + search;
+	}
+
+	@RequestMapping(value="/board", method=RequestMethod.GET)
+	public String boardList(Model model) {
+		List<Board> boards = boardService.getBoards();
+		model.addAttribute("boards", boards);
+		
+		return "admin/board";
+	}
+	
+	@RequestMapping(value="/createBoard", method=RequestMethod.POST)
+	public String createBoard(Board board) {
+		boardService.createBoard(board);
+		
+		return "redirect:/admin/board";
+	}
+
+	@RequestMapping(value="/editBoard", method=RequestMethod.POST)
+	public String editBoard(Board board) {
+		boardService.editBoard(board);
+		
+		return "redirect:/admin/board";
 	}
 	
 }

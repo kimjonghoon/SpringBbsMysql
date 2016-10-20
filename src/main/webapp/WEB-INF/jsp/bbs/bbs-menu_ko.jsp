@@ -6,6 +6,6 @@
 <h1><spring:message code="global.bbs" /></h1>
 <ul>
 	<c:forEach var="board" items="${boards }" varStatus="status">
-		<li><a href="/bbs/list?boardCd=${board.boardCd }&curPage=1">${board.boardNm }</a></li>
+		<li><a href="/bbs/list?boardCd=${board.boardCd }&curPage=1">${board.boardNm_ko }</a></li>
 	</c:forEach>
 </ul>

@@ -36,17 +36,6 @@ public class BbsController extends NumbersGeneratorForPaging {
 	@Autowired
 	private BoardService boardService;
 
-	private List<Board> getBoards(String lang) {
-		switch (lang) {
-		case "en":
-			return boardService.getListOfBoardCodeBoardName();
-		case "ko":
-			return boardService.getListOfBoardCodeBoardKoreanName();
-		default:
-			return boardService.getListOfBoardCodeBoardName();//설정에서 로케일 디폴트를 영어로 설정했으므로 
-		}
-	}
-
 	private String getBoardNm(String boardCd, String lang) {
 		Board board = boardService.getBoard(boardCd);
 
@@ -72,17 +61,17 @@ public class BbsController extends NumbersGeneratorForPaging {
 		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
 		Integer offset = ints.getOffset();
 		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
-		String boardNm = this.getBoardNm(boardCd, lang);
+		String boardName = this.getBoardNm(boardCd, lang);
 
 		model.addAttribute("list", list);
-		model.addAttribute("boardNm", boardNm);
+		model.addAttribute("boardName", boardName);
 		model.addAttribute("listItemNo", ints.getListItemNo());
 		model.addAttribute("prevPage", ints.getPrevPage());
 		model.addAttribute("nextPage", ints.getNextPage());
 		model.addAttribute("firstPage", ints.getFirstPage());
 		model.addAttribute("lastPage", ints.getLastPage());
 
-		List<Board> boards = this.getBoards(lang);
+		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
 
 		return "bbs/list";
@@ -92,11 +81,11 @@ public class BbsController extends NumbersGeneratorForPaging {
 	@RequestMapping(value="/write_form", method=RequestMethod.GET)
 	public String writeForm(String boardCd, Locale locale, Model model) {
 		String lang = locale.getLanguage();
-		String boardNm = this.getBoardNm(boardCd, lang);
-		model.addAttribute("boardNm", boardNm);
+		String boardName = this.getBoardNm(boardCd, lang);
+		model.addAttribute("boardName", boardName);
 		model.addAttribute("article", new Article());
 
-		List<Board> boards = this.getBoards(lang);
+		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
 
 		return "bbs/write_form";
@@ -111,9 +100,9 @@ public class BbsController extends NumbersGeneratorForPaging {
 			Principal principal) throws Exception {
 
 		if (bindingResult.hasErrors()) {
-			String boardNm = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
-			model.addAttribute("boardNm", boardNm);
-			List<Board> boards = this.getBoards(locale.getLanguage());
+			String boardName = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
+			model.addAttribute("boardName", boardName);
+			List<Board> boards = boardService.getBoards();
 			model.addAttribute("boards", boards);
 
 			return "bbs/write_form";
@@ -169,7 +158,7 @@ public class BbsController extends NumbersGeneratorForPaging {
 		Article nextArticle = boardService.getNextArticle(articleNo, boardCd, searchWord);
 		Article prevArticle = boardService.getPrevArticle(articleNo, boardCd, searchWord);
 		List<Comment> commentList = boardService.getCommentList(articleNo);
-		String boardNm = this.getBoardNm(boardCd, lang);
+		String boardName = this.getBoardNm(boardCd, lang);
 
 		//상세보기에서 볼 게시글 관련 정보
 		String title = article.getTitle();//제목
@@ -201,14 +190,14 @@ public class BbsController extends NumbersGeneratorForPaging {
 		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
 
 		model.addAttribute("list", list);
-		model.addAttribute("boardNm", boardNm);
+		model.addAttribute("boardName", boardName);
 		model.addAttribute("listItemNo", ints.getListItemNo());
 		model.addAttribute("prevPage", ints.getPrevPage());
 		model.addAttribute("nextPage", ints.getNextPage());
 		model.addAttribute("firstPage", ints.getFirstPage());
 		model.addAttribute("lastPage", ints.getLastPage());
 
-		List<Board> boards = this.getBoards(lang);
+		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
 
 		return "bbs/view";
@@ -286,13 +275,13 @@ public class BbsController extends NumbersGeneratorForPaging {
 
 		String lang = locale.getLanguage();
 		Article article = boardService.getArticle(articleNo);
-		String boardNm = this.getBoardNm(boardCd, lang);
+		String boardName = this.getBoardNm(boardCd, lang);
 
 		//수정페이지에서의 보일 게시글 정보
 		model.addAttribute("article", article);
-		model.addAttribute("boardNm", boardNm);
+		model.addAttribute("boardName", boardName);
 
-		List<Board> boards = this.getBoards(lang);
+		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
 
 		return "bbs/modify_form";
@@ -308,10 +297,10 @@ public class BbsController extends NumbersGeneratorForPaging {
 			MultipartHttpServletRequest mpRequest) throws Exception {
 
 		if (bindingResult.hasErrors()) {
-			String boardNm = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
-			model.addAttribute("boardNm", boardNm);
+			String boardName = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
+			model.addAttribute("boardName", boardName);
 
-			List<Board> boards = this.getBoards(locale.getLanguage());
+			List<Board> boards = boardService.getBoards();
 			model.addAttribute("boards", boards);
 
 			return "bbs/modify_form";

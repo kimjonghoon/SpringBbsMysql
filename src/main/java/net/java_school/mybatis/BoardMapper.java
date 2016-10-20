@@ -11,9 +11,17 @@ import net.java_school.board.Board;
 import net.java_school.board.Comment;
 
 public interface BoardMapper {
+	//게시판
+	public Board selectOneBoard(String boardCd);
+	
 	//게시판 목록
-	public List<Board> selectListOfBoardCodeBoardName();
-	public List<Board> selectListOfBoardCodeBoardKoreanName();
+	public List<Board> selectAllBoard();
+	
+	//게시판 생성
+	public void insertBoard(Board board);
+	
+	//게시판 수정
+	public void updateBoard(Board board);
 	
 	//목록
 	public List<Article> selectListOfArticles(
@@ -55,9 +63,6 @@ public interface BoardMapper {
 	//첨부파일 삭제
 	public void deleteFile(int attachFileNo);	
 	
-	//게시판
-	public Board selectOneBoard(String boardCd);
-
 	//댓글 쓰기
 	public void insertComment(Comment comment);	
 	

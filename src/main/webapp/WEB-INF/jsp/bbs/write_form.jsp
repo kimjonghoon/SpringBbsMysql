@@ -21,7 +21,8 @@ function goView() {
 
 <div id="url-navi">BBS</div>
 
-<h1>${boardNm }</h1>
+<h1>${boardName }</h1>
+
 <div id="bbs">
 <h2><spring:message code="bbs.new.article" /></h2>
 <sf:form id="writeForm" action="write?${_csrf.parameterName}=${_csrf.token}" method="post" commandName="article" enctype="multipart/form-data" onsubmit="return check();">

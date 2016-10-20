@@ -5,14 +5,24 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.java_school.mybatis.BoardMapper">
-	<select id="selectListOfBoardCodeBoardName" resultType="Board">
-	    SELECT boardcd,boardnm FROM board
+
+	<select id="selectOneBoard" parameterType="string" resultType="Board">
+	    SELECT * FROM board WHERE boardcd = #{boardCd}
 	</select>
 
-	<select id="selectListOfBoardCodeBoardKoreanName" resultType="Board">
-	    SELECT boardcd,boardnm_ko boardnm FROM board
+	<select id="selectAllBoard" resultType="Board">
+	    SELECT * FROM board
 	</select>
-
+	
+	<update id="updateBoard" parameterType="Board">
+		UPDATE board SET boardnm = #{boardNm}, boardnm_ko = #{boardNm_ko}
+		WHERE boardcd = #{boardCd}
+	</update>
+	
+	<insert id="insertBoard" parameterType="Board">
+		INSERT INTO board VALUES (#{boardCd}, #{boardNm}, #{boardNm_ko})
+	</insert>
+	
 	<select id="selectListOfArticles" resultType="Article">
 		SELECT 
 			a.articleno, a.title, a.regdate, a.hit, m.name, 
@@ -123,10 +133,6 @@
 	<delete id="deleteFile" parameterType="int">
 		DELETE FROM attachfile WHERE attachfileno = #{attachFileNo}
 	</delete>
-
-	<select id="selectOneBoard" parameterType="string" resultType="Board">
-		SELECT * FROM board WHERE boardcd = #{boardCd}
-	</select>
 
 	<insert id="insertComment" parameterType="Comment">
 		INSERT INTO comments (articleno, email, memo, regdate)
