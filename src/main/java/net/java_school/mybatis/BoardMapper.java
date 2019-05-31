@@ -3,82 +3,57 @@ package net.java_school.mybatis;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import net.java_school.board.Article;
 import net.java_school.board.AttachFile;
 import net.java_school.board.Board;
 import net.java_school.board.Comment;
 
 public interface BoardMapper {
-	//게시판
-	public Board selectOneBoard(String boardCd);
-	
-	//게시판 목록
-	public List<Board> selectAllBoard();
-	
-	//게시판 생성
-	public void insertBoard(Board board);
-	
-	//게시판 수정
-	public void updateBoard(Board board);
-	
-	//목록
-	public List<Article> selectListOfArticles(
-			@Param("boardCd") String boardCd,
-			@Param("searchWord") String searchWord,
-			@Param("offset") Integer offset,
-			@Param("rowCount") Integer rowCount);	
-	
-	//총 레코드
-	public int selectCountOfArticles(HashMap<String, String> hashmap);
-	
-	//글쓰기
-	public int insert(Article article);	
 
-	//첨부파일 추가
-	public void insertAttachFile(AttachFile attachFile);
+    public Board selectOneBoard(String boardCd);
 
-	//글수정
-	public void update(Article article);
-	
-	//글삭제
-	public void delete(int articleNo);
-	
-	//조회수 증가
-	public void updateHitPlusOne(int articleNo);	
-	
-	//상세보기
-	public Article selectOne(int articleNo);
-	
-	//다음글
-	public Article selectNextOne(HashMap<String, String> hashmap); 
-	
-	//이전글
-	public Article selectPrevOne(HashMap<String, String> hashmap);
+    public List<Board> selectAllBoard();
 
-	//첨부파일 리스트
-	public List<AttachFile> selectListOfAttachFiles(int articleNo);	
+    public void insertBoard(Board board);
 
-	//첨부파일 삭제
-	public void deleteFile(int attachFileNo);	
-	
-	//댓글 쓰기
-	public void insertComment(Comment comment);	
-	
-	//댓글 수정
-	public void updateComment(Comment comment);
-	
-	//댓글 삭제
-	public void deleteComment(int commentNo);
+    public void updateBoard(Board board);
 
-	//댓글 리스트
-	public List<Comment> selectListOfComments(int articleNo);
-	
-	//첨부파일 찾기
-	public AttachFile selectOneAttachFile(int attachFileNo);
+    public List<Article> selectListOfArticles(HashMap<String, String> hashmap);
 
-	//댓글 찾기
-	public Comment selectOneComment(int commentNo);
+    public int selectCountOfArticles(HashMap<String, String> hashmap);
+
+    public int insert(Article article);
+
+    public void insertAttachFile(AttachFile attachFile);
+
+    public void update(Article article);
+
+    public void delete(int articleNo);
+
+    public void insertOneViews(HashMap<String, String> hashmap);
+
+    public Article selectOne(int articleNo);
+
+    public Article selectNextOne(HashMap<String, String> hashmap);
+
+    public Article selectPrevOne(HashMap<String, String> hashmap);
+
+    public List<AttachFile> selectListOfAttachFiles(int articleNo);
+
+    public void deleteFile(int attachFileNo);
+
+    public void insertComment(Comment comment);
+
+    public void updateComment(Comment comment);
+
+    public void deleteComment(int commentNo);
+
+    public List<Comment> selectListOfComments(int articleNo);
+
+    public AttachFile selectOneAttachFile(int attachFileNo);
+
+    public Comment selectOneComment(int commentNo);
+
+    public int selectCountOfViews(int articleNo);
 
 }

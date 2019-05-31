@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC  
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="app.default" template="/WEB-INF/views/layouts/main-layout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+        <put-attribute name="main-menu" value="/WEB-INF/views/inc/main-menu.jsp" />
+        <put-attribute name="extra" value="/WEB-INF/views/inc/extra.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+        <put-list-attribute name="links">
+			<add-attribute value="/resources/css/screen.css" />
+			<add-attribute value="/resources/css/print.css" />
+        </put-list-attribute>
+        <put-list-attribute name="scripts">
+        	<add-attribute value="/resources/js/jquery-3.2.1.min.js" />
+			<add-attribute value="/resources/js/commons.js" />
+        </put-list-attribute>
+    </definition>
+    <definition name="blog.default" template="/WEB-INF/views/layouts/blog-layout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+        <put-attribute name="main-menu" value="/WEB-INF/views/inc/main-menu.jsp" />
+        <put-attribute name="extra" value="/WEB-INF/views/inc/extra.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+        <put-list-attribute name="links">
+			<add-attribute value="/resources/css/screen.css" />
+			<add-attribute value="/resources/css/print.css" />
+			<add-attribute value="/resources/css/blog.css" />
+			<add-attribute value="/resources/css/prettify.css" />
+        </put-list-attribute>
+        <put-list-attribute name="scripts">
+        	<add-attribute value="/resources/js/jquery-3.2.1.min.js" />
+			<add-attribute value="/resources/js/commons.js" />
+			<add-attribute value="/resources/js/prettify.js" />
+			<add-attribute value="/resources/js/javaschool-prettify.js" />			
+        </put-list-attribute>
+    </definition>
+    <definition name="403" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/403.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/error-sub.jsp" />
+        <put-attribute name="alias" value="403" />
+    </definition>
+    <definition name="error" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/error.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/error-sub.jsp" />
+        <put-attribute name="alias" value="error" />
+    </definition>    
+    <definition name="users/*" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/users/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/users/user-sub.jsp" />
+        <put-attribute name="alias" value="user.{1}" />
+    </definition>
+    <!-- BBS -->
+    <definition name="bbs/*" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/bbs/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/bbs/bbs-sub.jsp" />
+        <put-attribute name="alias" value="bbs.{1}" />
+    </definition>
+    <!-- admin -->
+    <definition name="admin/*" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/admin/admin-sub.jsp" />
+        <put-attribute name="alias" value="admin.{1}" />
+    </definition>    
+    <definition name="index" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/articles/java/JDK-Install_en.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/index-sub.jsp" />
+        <put-attribute name="alias" value="java.JDK-Install" />
+        <put-list-attribute name="links" inherit="true">
+            <add-attribute value="/resources/css/windows.css" />
+            <add-attribute value="/resources/css/prettify.css" />
+        </put-list-attribute>
+        <put-list-attribute name="scripts" inherit="true">
+            <add-attribute value="/resources/js/prettify.js" />
+            <add-attribute value="/resources/js/javaschool-prettify.js" />
+        </put-list-attribute>
+    </definition>
+    <definition name="*/*" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/articles/{1}/{2}_en.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/views/{1}/{1}-sub.jsp" />
+        <put-attribute name="alias" value="{1}.{2}" />
+    </definition>
+    <definition name="blog/index" extends="app.default">
+        <put-attribute name="content" value="/WEB-INF/views/blog/index.jsp" />
+        <put-attribute name="sidebar" value="" />
+        <put-attribute name="alias" value="blog.index" />
+        <put-list-attribute name="links" inherit="true">
+			<add-attribute value="/resources/css/blog.css" />
+        </put-list-attribute>
+    </definition>
+    <definition name="blog/*/*" extends="blog.default">
+        <put-attribute name="content" value="/WEB-INF/views/blog/content.jsp" />
+    </definition>
+</tiles-definitions>

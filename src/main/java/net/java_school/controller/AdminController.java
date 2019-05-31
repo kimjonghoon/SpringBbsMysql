@@ -1,117 +1,131 @@
 package net.java_school.controller;
 
-import java.net.URLEncoder;
-import java.util.List;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.security.Principal;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import net.java_school.blog.Article;
+import net.java_school.blog.Category;
+import net.java_school.blog.Lang;
 import net.java_school.board.Board;
 import net.java_school.board.BoardService;
-import net.java_school.commons.NumbersForPaging;
-import net.java_school.commons.NumbersGeneratorForPaging;
-import net.java_school.commons.WebContants;
-import net.java_school.user.User;
-import net.java_school.user.UserService;
+import net.java_school.commons.Paginator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.googlecode.objectify.Key;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController extends NumbersGeneratorForPaging {
+public class AdminController extends Paginator {
 
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
 	private BoardService boardService;
 
-	@RequestMapping(method=RequestMethod.GET)
-	public String index(Integer page, String search, Model model) {
-		if (page == null) page = 1;
-		
-		int numPerPage = 10;
-		int pagePerBlock = 10;
-		
-		int totalRecord = userService.getTotalCount(search);
-		
-		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, page, numPerPage, pagePerBlock);
-		Integer offset = ints.getOffset();
-		List<User> list = userService.getUsers(search, offset, numPerPage);
-		
-		model.addAttribute("list", list);
-		model.addAttribute("listItemNo", ints.getListItemNo());
-		model.addAttribute("prevPage", ints.getPrevPage());
-		model.addAttribute("nextPage", ints.getNextPage());
-		model.addAttribute("firstPage", ints.getFirstPage());
-		model.addAttribute("lastPage", ints.getLastPage());
-		
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
+	}
+
+	@GetMapping
+	public String index(Model model) {
+
+		List<Article> articles = ofy()
+				.load()
+				.type(Article.class)
+				.order("date")
+				.list();
+
+		model.addAttribute("articles", articles);
+
 		return "admin/index";
 	}
-	
-	@RequestMapping(value="editAccount", method=RequestMethod.GET)
-	public String editAccountForm(String email, Model model) {
-		User user = userService.getUser(email);
-		model.addAttribute(WebContants.USER_KEY, user);
-		
-		return "admin/editAccount";
-		
+	@GetMapping("/new")
+	public String postBlog() {
+		return "admin/new";
 	}
 
-	@RequestMapping(value="/editAccount", method=RequestMethod.POST)
-	public String editAccount(User user, Integer page, String search) throws Exception {
-		userService.editAccountByAdmin(user);
-		if (search != null && !search.equals("")) search = URLEncoder.encode(search, "UTF-8");
-		
-		return "redirect:/admin/editAccount?email=" + user.getEmail() + "&page=" + page + "&search=" + search;
+	@PostMapping("/new")
+	public String postBlog(Article article, String category, Locale locale, Principal principal) {
+		String lang = locale.getLanguage();
+		Key<Lang> theLang = Key.create(Lang.class, lang);
+		Key<Category> theCategory = Key.create(theLang, Category.class, category);
+		article.setTheCategory(theCategory);
+		article.setOwner(principal.getName());
 
-	}
-	
-	@RequestMapping(value="/changePasswd", method=RequestMethod.POST)
-	public String changePasswd(User user, Integer page, String search) throws Exception {
-		userService.changePasswdByAdmin(user);
-		if (search != null && !search.equals("")) search = URLEncoder.encode(search, "UTF-8");
+		Date today = new Date();
+		article.setDate(today);
+		article.setLastModified(today);
 
-		return "redirect:/admin/editAccount?email=" + user.getEmail() + "&page=" + page + "&search=" + search;
-	}
-	
-	@RequestMapping(value="/changeAuthority", method=RequestMethod.POST)
-	public String changeAuthority(User user, Integer page, String search) throws Exception {
-		userService.changeAuthority(user);
-		if (search != null && !search.equals("")) search = URLEncoder.encode(search, "UTF-8");
+		ofy().save().entity(article).now();
 
-		return "redirect:/admin/editAccount?email=" + user.getEmail() + "&page=" + page + "&search=" + search;
+		return "redirect:/admin";
 	}
 
-	@RequestMapping(value="/delUser", method=RequestMethod.POST)
-	public String delUser(User user, Integer page, String search) throws Exception {
-		userService.deleteUser(user);
-		if (search != null && !search.equals("")) search = URLEncoder.encode(search, "UTF-8");
+	@GetMapping("/modify")
+	public String modifyBlog(String webSafeString, Model model) {
+		Key<Article> key = Key.create(webSafeString);
+		Article article = ofy()
+				.load()
+				.key(key)
+				.now();
+		model.addAttribute("article", article);
 
-		return "redirect:/admin?page=" + page + "&search=" + search;
+		return "admin/modify";
 	}
 
-	@RequestMapping(value="/board", method=RequestMethod.GET)
+	@PostMapping("/modify")
+	public String modifyBlog(Article article, String webSafeString) {
+		Key<Article> key = Key.create(webSafeString);
+		Article storedArticle = ofy()
+				.load()
+				.key(key)
+				.now();
+
+		storedArticle.setTitle(article.getTitle());
+		storedArticle.setKeywords(article.getKeywords());
+		storedArticle.setDescription(article.getDescription());
+		storedArticle.setContent(article.getContent());
+		storedArticle.setLastModified(new Date());
+
+		ofy().save().entity(storedArticle).now();
+
+		return "redirect:/admin";
+	}
+
+	@PostMapping("/delete")
+	public String delBlog(String webSafeString) {
+		Key<Article> key = Key.create(webSafeString);
+		ofy().delete().key(key).now();
+
+		return "redirect:/admin";
+	}
+
+	@GetMapping("/board")
 	public String boardList(Model model) {
 		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
-		
+
 		return "admin/board";
 	}
-	
-	@RequestMapping(value="/createBoard", method=RequestMethod.POST)
+
+	@PostMapping("/createBoard")
 	public String createBoard(Board board) {
 		boardService.createBoard(board);
-		
+
 		return "redirect:/admin/board";
 	}
 
-	@RequestMapping(value="/editBoard", method=RequestMethod.POST)
+	@PostMapping("/editBoard")
 	public String editBoard(Board board) {
 		boardService.editBoard(board);
-		
+
 		return "redirect:/admin/board";
 	}
-	
+
 }

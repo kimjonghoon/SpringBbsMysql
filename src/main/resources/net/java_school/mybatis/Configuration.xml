@@ -4,21 +4,16 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-	<settings>
-		<setting name="logImpl" value="LOG4J" />
-	</settings>
 
-	<typeAliases>
-		<typeAlias type="net.java_school.board.AttachFile" alias="AttachFile" />
-		<typeAlias type="net.java_school.board.Comment" alias="Comment" />
-		<typeAlias type="net.java_school.board.Board" alias="Board" />
-		<typeAlias type="net.java_school.board.Article" alias="Article" />
-		<typeAlias type="net.java_school.user.User" alias="User" />
-	</typeAliases>
-
+    <typeAliases>
+        <typeAlias type="net.java_school.board.AttachFile" alias="AttachFile" />
+        <typeAlias type="net.java_school.board.Comment" alias="Comment" />
+        <typeAlias type="net.java_school.board.Board" alias="Board" />
+        <typeAlias type="net.java_school.board.Article" alias="Article" />
+    </typeAliases>
+    
 	<mappers>
 		<mapper resource="net/java_school/mybatis/BoardMapper.xml" />
-		<mapper resource="net/java_school/mybatis/UserMapper.xml" />
 	</mappers>
 
 </configuration>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+	<runtime>java8</runtime>
+	<threadsafe>true</threadsafe>
+	<use-google-connector-j>true</use-google-connector-j>
+	<sessions-enabled>true</sessions-enabled>
+	<static-files>
+	  <include path="/favicon.ico" >
+	  </include>
+	  <include path="/examples/**.java" >
+	  </include>
+	  <include path="/examples/**.zip" >
+	  </include>
+	  <include path="/examples/**.txt" >
+	  </include>
+	  <include path="/examples/**.html" >
+	  </include>
+	  <include path="/examples/**.js" >
+	  </include>
+	  <include path="/resources/articles/**.html" >
+	  </include>
+	  <include path="/resources/articles/2015/**.html" >
+	  </include>
+	  <include path="/resources/articles/2016/**.html" >
+	  </include>
+	  <include path="/resources/articles/2017/**.html" >
+	  </include>
+	  <include path="/resources/articles/2018/**.html" >
+	  </include>
+	  <include path="/resources/css/**.css" >
+	  </include>
+	  <include path="/resources/images/**.jpg" >
+	  </include>
+	  <include path="/resources/images/**.gif" >
+	  </include>
+	  <include path="/resources/images/**.png" >
+	  </include>
+	  <include path="/resources/js/**.js" >
+	  </include>
+	</static-files>	
+	<system-properties>
+		<property name="java.util.logging.config.file"
+			value="WEB-INF/logging.properties" />
+	</system-properties>
+</appengine-web-app>

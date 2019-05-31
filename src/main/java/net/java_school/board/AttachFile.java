@@ -1,5 +1,7 @@
 package net.java_school.board;
 
+import java.util.Date;
+
 public class AttachFile {
     private int attachFileNo;
     private String filename;    
@@ -7,6 +9,8 @@ public class AttachFile {
     private long filesize;    
     private int articleNo;
     private String email;
+    private String filekey;
+    private Date creation;
     
     public int getAttachFileNo() {
         return attachFileNo;
@@ -44,5 +48,17 @@ public class AttachFile {
     public void setEmail(String email) {
         this.email = email;
     }
+	public String getFilekey() {
+		return filekey;
+	}
+	public void setFilekey(String filekey) {
+		this.filekey = filekey;
+	}
+	public Date getCreation() {
+		return creation;
+	}
+	public void setCreation(Date creation) {
+		this.creation = creation;
+	}
     
 }

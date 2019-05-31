@@ -1,42 +1,51 @@
 package net.java_school.controller;
 
-import java.io.File;
 import java.net.URLEncoder;
 import java.security.Principal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import net.java_school.board.Article;
 import net.java_school.board.AttachFile;
 import net.java_school.board.Board;
 import net.java_school.board.BoardService;
-import net.java_school.board.Comment;
 import net.java_school.commons.NumbersForPaging;
-import net.java_school.commons.NumbersGeneratorForPaging;
-import net.java_school.commons.WebContants;
+import net.java_school.commons.Paginator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 @Controller
 @RequestMapping("/bbs")
-public class BbsController extends NumbersGeneratorForPaging {
-
-	@Autowired
+public class BbsController extends Paginator {
+	private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 	private BoardService boardService;
 
-	private String getBoardNm(String boardCd, String lang) {
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
+	}
+
+	private String getBoardName(String boardCd, String lang) {
 		Board board = boardService.getBoard(boardCd);
 
 		switch (lang) {
@@ -49,125 +58,95 @@ public class BbsController extends NumbersGeneratorForPaging {
 		}
 	}
 
-	@RequestMapping(value="/list", method=RequestMethod.GET)
-	public String list(String boardCd, Integer curPage, String searchWord, Locale locale, Model model) {
-		String lang = locale.getLanguage();
+	@GetMapping("/{boardCd}")
+	public String list(@CookieValue(value="numPerPage", defaultValue="10") String num, @PathVariable String boardCd, Integer page, String searchWord, Locale locale, Model model) {
 
-		int numPerPage = 10;
+		if (page == null) {
+			page = 1;
+		}
+
+		int numPerPage = Integer.parseInt(num);
 		int pagePerBlock = 10;
 
 		int totalRecord = boardService.getTotalRecord(boardCd, searchWord);
 
-		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
-		Integer offset = ints.getOffset();
-		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
-		String boardName = this.getBoardNm(boardCd, lang);
+		NumbersForPaging numbers = this.getNumbersForPaging(totalRecord, page, numPerPage, pagePerBlock);
+
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("boardCd", boardCd);
+		map.put("searchWord", searchWord);
+
+		Integer offset = (page - 1) * numPerPage;
+		Integer rowCount = numPerPage;
+		map.put("offset", offset.toString());
+		map.put("rowCount", rowCount.toString());
+
+		List<Article> list = boardService.getArticleList(map);
+
+		Integer listItemNo = numbers.getListItemNo();
+		Integer prevPage = numbers.getPrevBlock();
+		Integer nextPage = numbers.getNextBlock();
+		Integer firstPage = numbers.getFirstPage();
+		Integer lastPage = numbers.getLastPage();
+		Integer totalPage = numbers.getTotalPage();
 
 		model.addAttribute("list", list);
-		model.addAttribute("boardName", boardName);
-		model.addAttribute("listItemNo", ints.getListItemNo());
-		model.addAttribute("prevPage", ints.getPrevPage());
-		model.addAttribute("nextPage", ints.getNextPage());
-		model.addAttribute("firstPage", ints.getFirstPage());
-		model.addAttribute("lastPage", ints.getLastPage());
+		model.addAttribute("listItemNo", listItemNo);
+		model.addAttribute("prevPage", prevPage);
+		model.addAttribute("nextPage", nextPage);
+		model.addAttribute("firstPage", firstPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("totalPage", totalPage);
 
+		String lang = locale.getLanguage();
 		List<Board> boards = boardService.getBoards();
+		String boardName = this.getBoardName(boardCd, lang);
 		model.addAttribute("boards", boards);
+		model.addAttribute("boardName", boardName);
+
+		model.addAttribute("boardCd", boardCd);
 
 		return "bbs/list";
 
 	}
 
-	@RequestMapping(value="/write_form", method=RequestMethod.GET)
-	public String writeForm(String boardCd, Locale locale, Model model) {
-		String lang = locale.getLanguage();
-		String boardName = this.getBoardNm(boardCd, lang);
-		model.addAttribute("boardName", boardName);
-		model.addAttribute("article", new Article());
+	@GetMapping("/{boardCd}/{articleNo}")
+	public String view(@CookieValue(value="numPerPage", defaultValue="10") String num, @PathVariable String boardCd, @PathVariable Integer articleNo,
+			Integer page, String searchWord, Locale locale, HttpServletRequest req, Model model) {
 
-		List<Board> boards = boardService.getBoards();
-		model.addAttribute("boards", boards);
-
-		return "bbs/write_form";
-	}
-
-	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(@Valid Article article,
-			BindingResult bindingResult,
-			Model model,
-			MultipartHttpServletRequest mpRequest,
-			Locale locale,
-			Principal principal) throws Exception {
-
-		if (bindingResult.hasErrors()) {
-			String boardName = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
-			model.addAttribute("boardName", boardName);
-			List<Board> boards = boardService.getBoards();
-			model.addAttribute("boards", boards);
-
-			return "bbs/write_form";
+		if (page == null) {
+			page = 1;
 		}
-
-		article.setEmail(principal.getName());
-
-		boardService.addArticle(article);
-
-		//파일 업로드
-		Iterator<String> it = mpRequest.getFileNames();
-		List<MultipartFile> fileList = new ArrayList<MultipartFile>();
-		while (it.hasNext()) {
-			MultipartFile multiFile = mpRequest.getFile((String) it.next());
-			if (multiFile.getSize() > 0) {
-				String filename = multiFile.getOriginalFilename();
-				multiFile.transferTo(new File(WebContants.UPLOAD_PATH + filename));
-				fileList.add(multiFile);
-			}
-		}
-
-		//파일데이터 삽입
-		int size = fileList.size();
-		for (int i = 0; i < size; i++) {
-			MultipartFile mpFile = fileList.get(i);
-			AttachFile attachFile = new AttachFile();
-			String filename = mpFile.getOriginalFilename();
-			attachFile.setFilename(filename);
-			attachFile.setFiletype(mpFile.getContentType());
-			attachFile.setFilesize(mpFile.getSize());
-			attachFile.setArticleNo(article.getArticleNo());
-			attachFile.setEmail(principal.getName());
-			boardService.addAttachFile(attachFile);
-		}
-
-		return "redirect:/bbs/list?curPage=1&boardCd=" + article.getBoardCd();
-	}
-
-	@RequestMapping(value="/view", method=RequestMethod.GET)
-	public String view(Integer articleNo, 
-			String boardCd, 
-			Integer curPage,
-			String searchWord,
-			Locale locale,
-			Model model) {
-
 		String lang = locale.getLanguage();
 
-		boardService.increaseHit(articleNo);
+		//articleNo, user'ip, yearMonthDayHour
+		String ip = req.getRemoteAddr();
+		LocalDateTime now = LocalDateTime.now();
+		Integer year = now.getYear();
+		Integer month = now.getMonthValue();
+		Integer day = now.getDayOfMonth();
+		Integer hour = now.getHour();
+		String yearMonthDayHour = year.toString() + month.toString() + day.toString() + hour.toString();
 
-		Article article = boardService.getArticle(articleNo);//상세보기에서 볼 게시글
+		try {
+			boardService.increaseHit(articleNo, ip, yearMonthDayHour);
+		} catch (Exception e) {
+		}
+
+		Article article = boardService.getArticle(articleNo);
 		List<AttachFile> attachFileList = boardService.getAttachFileList(articleNo);
 		Article nextArticle = boardService.getNextArticle(articleNo, boardCd, searchWord);
 		Article prevArticle = boardService.getPrevArticle(articleNo, boardCd, searchWord);
-		List<Comment> commentList = boardService.getCommentList(articleNo);
-		String boardName = this.getBoardNm(boardCd, lang);
+		String boardName = this.getBoardName(boardCd, lang);
 
-		//상세보기에서 볼 게시글 관련 정보
-		String title = article.getTitle();//제목
-		String content = article.getContent();//내용
-		content = content.replaceAll(WebContants.LINE_SEPARATOR, "<br />");
-		int hit = article.getHit();//조회수
-		String name = article.getName();//작성자 이름
-		String email = article.getEmail();//작성자 ID
-		Date regdate = article.getRegdate();//작성일
+		String title = article.getTitle();
+		String content = article.getContent();
+		String name = article.getName();
+		String email = article.getEmail();
+		Date regdate = article.getRegdate();
+
+		int hit = boardService.getTotalViews(articleNo);
 
 		model.addAttribute("title", title);
 		model.addAttribute("content", content);
@@ -178,209 +157,197 @@ public class BbsController extends NumbersGeneratorForPaging {
 		model.addAttribute("attachFileList", attachFileList);
 		model.addAttribute("nextArticle", nextArticle);
 		model.addAttribute("prevArticle", prevArticle);
-		model.addAttribute("commentList", commentList);
 
-		//목록관련
-		int numPerPage = 10;//페이지당 레코드 수
-		int pagePerBlock = 10;//블록당 페이지 링크수
+		int numPerPage = Integer.parseInt(num);
+		int pagePerBlock = 10;
 
 		int totalRecord = boardService.getTotalRecord(boardCd, searchWord);
-		NumbersForPaging ints = this.getNumbersForPaging(totalRecord, curPage, numPerPage, pagePerBlock);
-		Integer offset = ints.getOffset();
-		List<Article> list = boardService.getArticleList(boardCd, searchWord, offset, numPerPage);
+
+		NumbersForPaging numbers = this.getNumbersForPaging(totalRecord, page, numPerPage, pagePerBlock);
+
+		HashMap<String, String> map = new HashMap<>();
+		map.put("boardCd", boardCd);
+		map.put("searchWord", searchWord);
+
+		Integer offset = (page - 1) * numPerPage;
+		Integer rowCount = numPerPage;
+		map.put("offset", offset.toString());
+		map.put("rowCount", rowCount.toString());
+
+		List<Article> list = boardService.getArticleList(map);
+
+		int listItemNo = numbers.getListItemNo();
+		int prevPage = numbers.getPrevBlock();
+		int nextPage = numbers.getNextBlock();
+		int firstPage = numbers.getFirstPage();
+		int lastPage = numbers.getLastPage();
+		int totalPage = numbers.getTotalPage();
 
 		model.addAttribute("list", list);
+		model.addAttribute("listItemNo", listItemNo);
+		model.addAttribute("prevPage", prevPage);
+		model.addAttribute("firstPage", firstPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("nextPage", nextPage);
+		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("boardName", boardName);
-		model.addAttribute("listItemNo", ints.getListItemNo());
-		model.addAttribute("prevPage", ints.getPrevPage());
-		model.addAttribute("nextPage", ints.getNextPage());
-		model.addAttribute("firstPage", ints.getFirstPage());
-		model.addAttribute("lastPage", ints.getLastPage());
 
 		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
 
+		model.addAttribute("articleNo", articleNo);
+		model.addAttribute("boardCd", boardCd);
+
 		return "bbs/view";
 	}
 
-	@RequestMapping(value="/addComment", method=RequestMethod.POST)
-	public String addComment(Integer articleNo, 
-			String boardCd, 
-			Integer curPage, 
-			String searchWord,
-			String memo,
+	@GetMapping("/{boardCd}/new")
+	public String writeForm(@PathVariable String boardCd, Locale locale, Model model) {
+		String lang = locale.getLanguage();
+		String boardName = this.getBoardName(boardCd, lang);
+		List<Board> boards = boardService.getBoards();
+
+		model.addAttribute("boardName", boardName);
+		model.addAttribute("article", new Article());
+		model.addAttribute("boards", boards);
+		model.addAttribute("boardCd", boardCd);
+
+		return "bbs/write";
+
+	}
+	@PostMapping("/upload")
+	public String upload(Integer articleNo, String boardCd, Integer page, String searchWord, HttpServletRequest req) {
+		Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
+		List<BlobKey> blobKeys = blobs.get("attachFile");
+
+		if (blobKeys != null && !blobKeys.isEmpty()) {
+			BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
+			int size = blobKeys.size();
+
+			for (int i = 0; i < size; i++) {
+				BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKeys.get(i));
+				AttachFile attachFile = new AttachFile();
+				String filekey = blobKeys.get(i).getKeyString();
+				attachFile.setFilekey(filekey);
+				attachFile.setFilename(blobInfo.getFilename());
+				attachFile.setFiletype(blobInfo.getContentType());
+				attachFile.setFilesize(blobInfo.getSize());
+				attachFile.setCreation(blobInfo.getCreation());
+				attachFile.setArticleNo(articleNo);
+				Article article = boardService.getArticle(articleNo);
+				attachFile.setEmail(article.getEmail());
+				boardService.addAttachFile(attachFile);
+			}
+
+		}
+
+		return "redirect:/bbs/" + boardCd + "/" + articleNo + "?page=" + page + "&searchWord=" + searchWord;
+
+	}
+
+	@PostMapping("/{boardCd}")
+	public String write(@Valid Article article,
+			BindingResult bindingResult,
+			@PathVariable String boardCd,
+			Locale locale,
+			Model model,
 			Principal principal) throws Exception {
 
-		Comment comment = new Comment();
-		comment.setArticleNo(articleNo);
-		comment.setEmail(principal.getName());
-		comment.setMemo(memo);
+		if (bindingResult.hasErrors()) {
+			String boardName = this.getBoardName(boardCd, locale.getLanguage());
+			model.addAttribute("boardName", boardName);
+			List<Board> boards = boardService.getBoards();
+			model.addAttribute("boards", boards);
+			model.addAttribute("boardCd", boardCd);
 
-		boardService.addComment(comment);
+			return "bbs/write";
+		}
 
-		searchWord = URLEncoder.encode(searchWord,"UTF-8");
+		article.setBoardCd(boardCd);
+		article.setEmail(principal.getName());
+		boardService.addArticle(article);
 
-		return "redirect:/bbs/view?articleNo=" + articleNo + 
-				"&boardCd=" + boardCd + 
-				"&curPage=" + curPage + 
-				"&searchWord=" + searchWord;
-
-	}
-
-	@RequestMapping(value="/updateComment", method=RequestMethod.POST)
-	public String updateComment(Integer commentNo, 
-			Integer articleNo, 
-			String boardCd, 
-			Integer curPage, 
-			String searchWord, 
-			String memo) throws Exception {
-
-		Comment comment = boardService.getComment(commentNo);
-		comment.setMemo(memo);
-		boardService.modifyComment(comment);
-
-		searchWord = URLEncoder.encode(searchWord, "UTF-8");
-
-		return "redirect:/bbs/view?articleNo=" + articleNo + 
-				"&boardCd=" + boardCd + 
-				"&curPage=" + curPage + 
-				"&searchWord=" + searchWord;
+		return "redirect:/bbs/" + article.getBoardCd() + "?page=1";
 
 	}
 
-	@RequestMapping(value="/deleteComment", method=RequestMethod.POST)
-	public String deleteComment(Integer commentNo, 
-			Integer articleNo, 
-			String boardCd, 
-			Integer curPage, 
-			String searchWord) throws Exception {
-
-		Comment comment = boardService.getComment(commentNo);
-		boardService.removeComment(comment);
-
-		searchWord = URLEncoder.encode(searchWord,"UTF-8");
-
-		return "redirect:/bbs/view?articleNo=" + articleNo + 
-				"&boardCd=" + boardCd + 
-				"&curPage=" + curPage + 
-				"&searchWord=" + searchWord;
-
-	}
-
-	@RequestMapping(value="/modify_form", method=RequestMethod.GET)
-	public String modifyForm(Integer articleNo, 
-			String boardCd,
-			Locale locale,
-			Model model) {
+	@GetMapping("/{boardCd}/{articleNo}/edit")
+	public String modifyForm(@PathVariable String boardCd, @PathVariable Integer articleNo, Locale locale, Model model) {
 
 		String lang = locale.getLanguage();
 		Article article = boardService.getArticle(articleNo);
-		String boardName = this.getBoardNm(boardCd, lang);
+		String boardName = this.getBoardName(boardCd, lang);
 
-		//수정페이지에서의 보일 게시글 정보
 		model.addAttribute("article", article);
 		model.addAttribute("boardName", boardName);
 
 		List<Board> boards = boardService.getBoards();
 		model.addAttribute("boards", boards);
+		model.addAttribute("boardCd", boardCd);
+		model.addAttribute("articleNo", articleNo);
 
-		return "bbs/modify_form";
+		return "bbs/modify";
 	}
 
-	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	@PostMapping("/{boardCd}/{articleNo}")
 	public String modify(@Valid Article article,
 			BindingResult bindingResult,
-			Integer curPage,
+			@PathVariable String boardCd,
+			@PathVariable Integer articleNo,
+			Integer page,
 			String searchWord,
 			Locale locale,
-			Model model,
-			MultipartHttpServletRequest mpRequest) throws Exception {
+			Model model) throws Exception {
 
 		if (bindingResult.hasErrors()) {
-			String boardName = this.getBoardNm(article.getBoardCd(), locale.getLanguage());
+			String boardName = this.getBoardName(article.getBoardCd(), locale.getLanguage());
 			model.addAttribute("boardName", boardName);
-
 			List<Board> boards = boardService.getBoards();
 			model.addAttribute("boards", boards);
+			model.addAttribute("boardCd", boardCd);
+			model.addAttribute("articleNo", articleNo);
 
-			return "bbs/modify_form";
+			return "bbs/modify";
 		}
 
-		//관리자가 수정하더라도 원글 소유자를 그대로 유지하기 위해서 
+		article.setArticleNo(articleNo);
+		article.setBoardCd(boardCd);
 		String email = boardService.getArticle(article.getArticleNo()).getEmail();
 		article.setEmail(email);
 
-		//게시글 수정
 		boardService.modifyArticle(article);
 
-		//파일업로드
-		Iterator<String> it = mpRequest.getFileNames();
-		List<MultipartFile> fileList = new ArrayList<MultipartFile>();
-		while (it.hasNext()) {
-			MultipartFile multiFile = mpRequest.getFile((String) it.next());
-			if (multiFile.getSize() > 0) {
-				String filename = multiFile.getOriginalFilename();
-				multiFile.transferTo(new File(WebContants.UPLOAD_PATH + filename));
-				fileList.add(multiFile);
-			}
-		}
+		searchWord = URLEncoder.encode(searchWord, "UTF-8");
 
-		//파일데이터 삽입
-		int size = fileList.size();
-		for (int i = 0; i < size; i++) {
-			MultipartFile mpFile = fileList.get(i);
-			AttachFile attachFile = new AttachFile();
-			String filename = mpFile.getOriginalFilename();
-			attachFile.setFilename(filename);
-			attachFile.setFiletype(mpFile.getContentType());
-			attachFile.setFilesize(mpFile.getSize());
-			attachFile.setArticleNo(article.getArticleNo());
-			attachFile.setEmail(article.getEmail());//첨부파일 소유자는 원글 소유자가 되도록
-			boardService.addAttachFile(attachFile);
-		}
-
-		searchWord = URLEncoder.encode(searchWord,"UTF-8");
-
-		return "redirect:/bbs/view?articleNo=" + article.getArticleNo() 
-				+ "&boardCd=" + article.getBoardCd() 
-				+ "&curPage=" + curPage 
-				+ "&searchWord=" + searchWord;
+		return "redirect:/bbs/" + boardCd + "/" + articleNo + "?page=" + page + "&searchWord=" + searchWord;
 
 	}
 
-	@RequestMapping(value="/deleteAttachFile", method=RequestMethod.POST)
-	public String deleteAttachFile(Integer attachFileNo, 
-			Integer articleNo, 
-			String boardCd, 
-			Integer curPage, 
+	@RequestMapping(value = "/{boardCd}/{articleNo}", method = RequestMethod.DELETE)
+	public String deleteArticle(@PathVariable String boardCd, @PathVariable Integer articleNo, Integer page, String searchWord) {
+		Article article = boardService.getArticle(articleNo);
+		boardService.removeArticle(article);
+
+		return "redirect:/bbs/" + boardCd + "?page=" + page + "&searchWord=" + searchWord;
+
+	}
+
+	@PostMapping("/deleteAttachFile")
+	public String deleteAttachFile(int attachFileNo,
+			Integer articleNo,
+			String boardCd,
+			Integer page,
 			String searchWord) throws Exception {
 
 		AttachFile attachFile = boardService.getAttachFile(attachFileNo);
 		boardService.removeAttachFile(attachFile);
-
-		searchWord = URLEncoder.encode(searchWord,"UTF-8");
-
-		return "redirect:/bbs/view?articleNo=" + articleNo + 
-				"&boardCd=" + boardCd + 
-				"&curPage=" + curPage + 
-				"&searchWord=" + searchWord;
-
-	}
-
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public String del(Integer articleNo, 
-			String boardCd, 
-			Integer curPage, 
-			String searchWord) throws Exception {
-
-		Article article = boardService.getArticle(articleNo);
-		boardService.removeArticle(article);
+		
+		BlobKey blobKey = new BlobKey(attachFile.getFilekey());
+		blobstoreService.delete(blobKey);
 
 		searchWord = URLEncoder.encode(searchWord, "UTF-8");
 
-		return "redirect:/bbs/list?boardCd=" + boardCd + 
-				"&curPage=" + curPage + 
-				"&searchWord=" + searchWord;
+		return "redirect:/bbs/" + boardCd + "/" + articleNo + "?page=" + page + "&searchWord=" + searchWord;
 
 	}
 
