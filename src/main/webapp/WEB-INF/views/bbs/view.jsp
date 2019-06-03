@@ -20,7 +20,7 @@ function displayComments() {
         $.each(data, function (i, item) {
             var creation = new Date(item.regdate);
             var comments = '<div class="comments">'
-                    + '<span class="writer">' + item.email + '</span>'
+                    + '<span class="writer">' + item.name + '</span>'
                     + '<span class="date">' + creation.toLocaleString() + '</span>';
             if (item.editable === true) {
                 comments = comments
@@ -261,7 +261,7 @@ $(document).on('click', '#all-comments', function (e) {
     </tr>
 </table>
 <div id="detail">
-    <div id="date-writer-hit">edited <fmt:formatDate pattern="yyyy.MM.dd HH:mm:ss" value="${regdate }" /> by ${email } hit ${hit }</div>
+    <div id="date-writer-hit">edited <fmt:formatDate pattern="yyyy.MM.dd HH:mm:ss" value="${regdate }" /> by ${name } hit ${hit }</div>
     <div id="article-content">${content }</div>
     <div id="file-list" style="text-align: right">
         <c:forEach var="file" items="${attachFileList }" varStatus="status">

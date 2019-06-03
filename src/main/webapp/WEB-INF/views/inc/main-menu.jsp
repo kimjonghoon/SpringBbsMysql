@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%@ page import="net.java_school.commons.WebContants" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 
 <ul id="nav">
@@ -12,7 +13,7 @@
     <li><a href="/javascript/introduction">JavaScript</a></li>
     <li><a href="/google-app-engine/building-gae-projects-with-maven">Google Cloud</a></li>
     <li><a href="/blog">Blog</a></li>
-    <li><a href="/bbs/chat?page=1">BBS</a></li>
+    <li><a href="<%=WebContants.GO_TO_PAGE_AFTER_LOGIN %>">BBS</a></li>
     <security:authorize access="hasRole('ROLE_ADMIN')">
         <li><a href="/admin">Admin</a></li>
     </security:authorize>

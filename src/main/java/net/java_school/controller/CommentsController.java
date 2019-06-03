@@ -28,6 +28,14 @@ public class CommentsController {
 	public List<Comment> getAllComments(@PathVariable Integer articleNo, Principal principal, Authentication authentication) {
 
 		List<Comment> comments = boardService.getCommentList(articleNo);
+		
+		//if you don't want to save user'information
+		for (Comment comment : comments) {
+			String email = comment.getEmail();
+			int endIndex = email.indexOf("@");
+			String name = email.substring(0, endIndex);
+			comment.setName(name);
+		}
 
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		for (GrantedAuthority authority : authorities) {

@@ -142,8 +142,9 @@ public class BbsController extends Paginator {
 
 		String title = article.getTitle();
 		String content = article.getContent();
-		String name = article.getName();
 		String email = article.getEmail();
+		int endIndex = email.indexOf("@");
+		String name = email.substring(0, endIndex);
 		Date regdate = article.getRegdate();
 
 		int hit = boardService.getTotalViews(articleNo);

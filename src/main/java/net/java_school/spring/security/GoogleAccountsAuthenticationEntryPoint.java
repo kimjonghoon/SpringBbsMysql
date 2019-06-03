@@ -12,9 +12,11 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import net.java_school.commons.WebContants;
+
 public class GoogleAccountsAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 		UserService userService = UserServiceFactory.getUserService();
-		response.sendRedirect(userService.createLoginURL("/"));
+		response.sendRedirect(userService.createLoginURL(WebContants.GO_TO_PAGE_AFTER_LOGIN));
 	}
 }
