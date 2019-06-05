@@ -61,6 +61,9 @@
         <put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp" />
         <put-attribute name="sidebar" value="/WEB-INF/views/admin/admin-sub.jsp" />
         <put-attribute name="alias" value="admin.{1}" />
+        <put-list-attribute name="links" inherit="true">
+            <add-attribute value="/resources/css/admin.css" />
+        </put-list-attribute>
     </definition>    
     <definition name="index" extends="app.default">
         <put-attribute name="content" value="/WEB-INF/views/articles/java/JDK-Install_en.jsp" />

@@ -27,6 +27,9 @@ $(document).ready(function () {
 </script>
 <article>
 <h3><spring:message code="blog.list" /></h3>
+<p style="text-align: right">
+<a href="/admin/new" style="text-transform: capitalize;"><spring:message code="blog.new" /></a>
+</p>
 <ul id="blog-list">
     <c:forEach var="article" items="${articles }" varStatus="status">
         <li>${article.category }/${article.id } ${article.title }
@@ -39,5 +42,5 @@ $(document).ready(function () {
     <input type="hidden" name="webSafeString" />
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
-<a href="/admin/new" style="text-transform: capitalize;"><spring:message code="blog.new" /></a>
+
 </article>
