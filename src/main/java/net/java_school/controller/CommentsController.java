@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.java_school.board.BoardService;
 import net.java_school.board.Comment;
-import net.java_school.spring.security.AppRole;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +29,7 @@ public class CommentsController {
 
 		List<Comment> comments = boardService.getCommentList(articleNo);
 		
-		//if you don't want to save user'information
+		//if you don't want to save user'information, fetch comments's owner name from their email.
 		for (Comment comment : comments) {
 			String email = comment.getEmail();
 			int endIndex = email.indexOf("@");
@@ -41,7 +40,7 @@ public class CommentsController {
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		for (GrantedAuthority authority : authorities) {
 			String role = authority.getAuthority();
-			if (role.equals(AppRole.ROLE_ADMIN)) {
+			if (role.equals("ROLE_ADMIN")) {
 				boardService.setEditableTrue(comments);
 				return comments;
 			}
