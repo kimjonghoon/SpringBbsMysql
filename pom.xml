@@ -23,7 +23,7 @@
 		<objectify.version>5.1.22</objectify.version>
 		<guava.version>23.0</guava.version>
 		<archiveClasses>true</archiveClasses>
-		<spring.version>5.1.7.RELEASE</spring.version>
+		<spring.version>5.1.8.RELEASE</spring.version>
 		<spring.security.version>5.1.5.RELEASE</spring.security.version>
 	</properties>
 
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>1.9.74</version>
+			<version>1.9.75</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -78,13 +78,13 @@
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-testing</artifactId>
-			<version>1.9.74</version>
+			<version>1.9.75</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-stubs</artifactId>
-			<version>1.9.74</version>
+			<version>1.9.75</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
